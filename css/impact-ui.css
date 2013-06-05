@@ -202,6 +202,14 @@ input[type=text].input-small {
 
 .editor-toolbar-right tr:hover td {
     border-bottom: solid 1px #33b5e5;
+    color: #fff;
+}
+
+.editor-toolbar-right tr:hover input[type=text],
+.editor-toolbar-right tr:hover select,
+.editor-toolbar-right input[type=text]:focus,
+.editor-toolbar-right select:focus {
+    color: #fff;
 }
 
 .editor-toolbar-right select {
