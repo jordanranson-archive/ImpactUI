@@ -11,9 +11,6 @@
     <script src="js/knockout-2.2.1.js"></script>
 	<script src="js/impact-ui.js"></script>
 	<script>
-	$(function() {
-        
-    });
     </script>
 </head>
 <body>
@@ -38,10 +35,10 @@
             <h2>Components</h2>
             <div class="scrollable-wrapper">
                 <ul class="components">
-                    <li class="top">UI Panel</li>
+                    <li class="top" data-bind="click: function(data, event) { displayProperties(true) }">UI Panel</li>
                 </ul>
-                <ul class="components">
-
+                <ul class="components" data-bind="foreach: components">
+                    <li data-bind="click: $parent.displayProperties, text: name"></li>
                 </ul>
             </div>
         </div>
@@ -49,9 +46,12 @@
         <!-- Layout editor -->
         <div class="editor-window">
                 
-            <div class="panel">
-                
-            </div>
+            <div class="panel" data-bind="style: { 
+                width: panel.width() + 'px',
+                height: panel.height() + 'px',
+                marginTop: '-' + (panel.height() / 2) + 'px',
+                marginLeft: '-' + (panel.width() / 2) + 'px'
+            }"></div>
                 
         </div>
         
@@ -59,11 +59,13 @@
         <div class="editor-toolbar-right">
             <h2>Properties</h2>
             <div class="scrollable-wrapper">
-                <table cellspacing="0" cellpadding="2">
-                    <col width="50%">
-                    <col width="50%">
-                    <tbody>
-                        
+                <table cellspacing="0" cellpadding="2" width="100%">
+                    <colgroup>
+                        <col width="50%">
+                        <col width="50%">
+                    </colgroup>
+                    <tbody data-bind="foreach: properties">
+                        <tr><td data-bind="text: key"></td><td data-bind="text: value"></td></tr>
                     </tbody>
                 </table>
             </div>
