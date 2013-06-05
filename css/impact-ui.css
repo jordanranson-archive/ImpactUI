@@ -47,7 +47,7 @@ table {
 /* ----- */
 
 body {
-    background: #141414;
+    background: #202020;
     color: #999;
     font-size: 12pt;
     font-family: "Droid Sans";
@@ -81,7 +81,7 @@ input, select {
 }
 
 input[type=text] {
-    border-bottom: solid 1px #262626;
+    border-bottom: solid 1px #343434;
 }
 
 input[type=text].input-small {
@@ -98,7 +98,7 @@ input[type=text].input-small {
     right: 0;
     height: 51px;
     line-height: 50px;
-    box-shadow: 0 -1px 0 #262626 inset;
+    box-shadow: 0 -1px 0 #343434 inset;
     padding: 0 40px;
 }
 
@@ -153,12 +153,12 @@ input[type=text].input-small {
 .editor-toolbar-left li {
     padding: 3px 3px 3px 16px;
     margin-bottom: 1px;
+    cursor: pointer;
 }
 
 .editor-toolbar-left li:hover {
-    background: #262626;
+    background: #242424;
     color: #fff;
-    cursor: move;
 }
 
 .editor-toolbar-left li.active {
@@ -217,18 +217,18 @@ input[type=text].input-small {
 }
 
 .editor-toolbar-right tr:first-child td {
-    border-top: solid 1px #262626;
+    border-top: solid 1px #242424;
 }
 
 .editor-toolbar-right td {
-    border-bottom: solid 1px #262626;
+    border-bottom: solid 1px #242424;
     height: 21px;
     line-height: 21px;
     padding: 2px 4px;
 }
 
 .editor-toolbar-right tr td:first-child {
-    border-right: solid 1px #262626;
+    border-right: solid 1px #242424;
 }
 
 .editor-window {
@@ -257,7 +257,7 @@ input[type=text].input-small {
     left: 0;
     right: 0;
     height: 41px;
-    box-shadow: 0 1px 0 #262626 inset;
+    box-shadow: 0 1px 0 #343434 inset;
     padding: 0 40px;
     line-height: 40px;
 }
