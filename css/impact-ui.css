@@ -161,9 +161,10 @@ input[type=text].input-small {
     color: #fff;
 }
 
-.editor-toolbar-left li.active {
+.editor-toolbar-left li.selected {
     border-bottom: solid 1px #33b5e5;
     margin-bottom: 0px;
+    background: #242424;
     color: #fff;
 }
 
@@ -201,7 +202,7 @@ input[type=text].input-small {
 }
 
 .editor-toolbar-right tr:hover td {
-    border-bottom: solid 1px #33b5e5;
+    background: #242424;
     color: #fff;
 }
 
@@ -251,6 +252,25 @@ input[type=text].input-small {
     background-repeat: repeat;
     box-shadow: 0 5px 15px #000;
     z-index: 5;
+}
+
+.component {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.component.label {
+    width: auto;
+    height: 14px;
+    line-height: 14px;
+    color: #fff;
 }
 
 .editor-footer {

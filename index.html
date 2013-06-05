@@ -35,10 +35,10 @@
             <h2>Components</h2>
             <div class="scrollable-wrapper">
                 <ul class="components">
-                    <li class="top" data-bind="click: function(data, event) { displayProperties(true) }">UI Panel</li>
+                    <li class="top" data-bind="click: function(data, event) { displayProperties(false, event) }">UI Panel</li>
                 </ul>
                 <ul class="components" data-bind="foreach: components">
-                    <li data-bind="click: $parent.displayProperties, text: name"></li>
+                    <li data-bind="click: function(data, event) { $parent.displayProperties(this, event) }, text: name"></li>
                 </ul>
             </div>
         </div>
@@ -46,12 +46,32 @@
         <!-- Layout editor -->
         <div class="editor-window">
                 
-            <div class="panel" data-bind="style: { 
+            <div class="panel" data-bind="
+            style: { 
                 width: panel.width() + 'px',
                 height: panel.height() + 'px',
                 marginTop: '-' + (panel.height() / 2) + 'px',
                 marginLeft: '-' + (panel.width() / 2) + 'px'
-            }"></div>
+            }, foreach: components
+            ">
+            
+                <!-- ko if: type === "label" -->
+                <div class="component label" data-bind="
+                event: { mouseup: function(data, event) {
+                    var $tar = $(event.delegateTarget);
+                    this.x($tar.position().left);
+                    this.y($tar.position().top);
+                    console.log(this);
+                }},
+                style: {
+                    left: x() + 'px',
+                    top: y() + 'px'
+                }, 
+                text: text(),
+                "></div>
+                <!-- /ko -->
+            
+            </div>
                 
         </div>
         
@@ -65,7 +85,10 @@
                         <col width="50%">
                     </colgroup>
                     <tbody data-bind="foreach: properties">
-                        <tr><td data-bind="text: key"></td><td data-bind="text: value"></td></tr>
+                        <tr>
+                            <td data-bind="text: key"></td>
+                            <td><input type="text" data-bind="value: value()"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
