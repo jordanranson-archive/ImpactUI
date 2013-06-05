@@ -44,9 +44,12 @@ table {
 	border-spacing: 0;
 }
 
+/* ----- */
+
 body {
     background: #141414;
     color: #999;
+    font-size: 12pt;
     font-family: "Droid Sans";
 }
 
@@ -68,6 +71,24 @@ a:hover {
     color: #fff;
 }
 
+input, select {
+    border: none;
+    font-size: 12pt;
+    background: rgba(0,0,0,0.5);
+    font-family: "Droid Sans";
+    font-style: italic;
+    color: #999;
+}
+
+input[type=text] {
+    border-bottom: solid 1px #262626;
+}
+
+input[type=text].input-small {
+    width: 64px;
+    text-align: center;
+}
+
 /* Header */
 
 .editor-header {
@@ -87,15 +108,26 @@ a:hover {
 
 .file-menu li {
     display: block;
-    padding: 0 15px;
     height: 50px;
     float: right;
+    padding: 0 5px;
+    margin-left: 25px;
 }
 
 .file-menu li:hover {
     color: #fff;
     border-bottom: solid 1px #33b5e5;
     cursor: pointer;
+}
+
+.file-menu li i {
+    font-weight: normal !important;
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+.file-menu li:hover i {
+    color: #33b5e5;
 }
 
 .editor-content {
@@ -114,7 +146,30 @@ a:hover {
     width: 240px;
     box-sizing: border-box;
     padding: 10px;
-    background: rgba(0,0,0,0.5);
+    background: #040404;
+    z-index: 10;
+}
+
+.editor-toolbar-left li {
+    padding: 3px 3px 3px 16px;
+    margin-bottom: 1px;
+}
+
+.editor-toolbar-left li:hover {
+    background: #262626;
+    color: #fff;
+    cursor: move;
+}
+
+.editor-toolbar-left li.active {
+    border-bottom: solid 1px #33b5e5;
+    margin-bottom: 0px;
+    color: #fff;
+}
+
+.editor-toolbar-left li.top {
+    padding: 2px;
+    font-weight: bold;
 }
 
 .editor-toolbar-right {
@@ -123,19 +178,69 @@ a:hover {
     bottom: 40px;
     right: 0;
     width: 240px;
-    background: rgba(0,0,0,0.5);
+    background: #040404;
+    z-index: 10;
+    font-size: 10pt;
 }
 
 .editor-toolbar-right h2 {
-    padding: 10px 10px 0 10px;
+    margin-bottom: 0px;
+    padding: 10px;
+}
+
+.editor-toolbar-right input[type=text], 
+.editor-toolbar-right select {
+    height: 21px;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    vertical-align: middle;
+    background: transparent;
+    font-size: 10pt;
+}
+
+.editor-toolbar-right tr:hover td {
+    border-bottom: solid 1px #33b5e5;
+}
+
+.editor-toolbar-right select {
+    background: #040404;
+}
+
+.editor-toolbar-right tr:first-child td {
+    border-top: solid 1px #262626;
+}
+
+.editor-toolbar-right td {
+    border-bottom: solid 1px #262626;
+    height: 21px;
+    line-height: 21px;
+    padding: 2px 4px;
+}
+
+.editor-toolbar-right tr td:first-child {
+    border-right: solid 1px #262626;
 }
 
 .editor-window {
     position: absolute;
     top: 40px;
     bottom: 40px;
-    left: 240px;
-    right: 240px;
+    left: 280px;
+    right: 280px;
+}
+
+.panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 512px;
+    height: 374px;
+    margin: -187px 0 0 -256px;
+    background: #999;
+    box-shadow: 0 5px 15px #000;
+    z-index: 5;
 }
 
 .editor-footer {
