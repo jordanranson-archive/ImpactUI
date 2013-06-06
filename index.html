@@ -9,11 +9,51 @@
 	<script src="js/jquery-1.9.1.js"></script>
 	<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="js/knockout-2.2.1.js"></script>
+    <script src="js/models.js"></script>
 	<script src="js/impact-ui.js"></script>
 	<script>
     </script>
 </head>
 <body>
+    <div class="overlay"></div>
+
+    <div class="modal add-component">
+        <div class="pull-right modal-close"><i class="icon-remove-sign icon-2x" data-bind="click: hideModals"></i></div>
+        <h2>New Component</h2>
+        <p>Choose a component to add &mdash;</p>
+        <div class="toggle-radio">
+            <input type="radio" id="tgl-component-1" name="tgl-component" value="label" checked>
+            <label class="btn" for="tgl-component-1">
+                <i class="icon-sign-blank"></i>
+                <i class="icon-check-sign"></i>
+                Label
+            </label>
+            
+            <input type="radio" id="tgl-component-2" name="tgl-component" value="button">
+            <label class="btn" for="tgl-component-2">
+                <i class="icon-sign-blank"></i>
+                <i class="icon-check-sign"></i>
+                Button
+            </label>
+            
+            <input type="radio" id="tgl-component-3" name="tgl-component" value="image">
+            <label class="btn" for="tgl-component-3">
+                <i class="icon-sign-blank"></i>
+                <i class="icon-check-sign"></i>
+                Image
+            </label>
+        </div>
+        <footer>
+            <a class="btn btn-primary" data-bind="click: 
+            function(data, event) { 
+                createComponent($('input[name=tgl-component]:radio:checked').val()); 
+                hideModals();
+            }">
+                <i class="icon-ok-sign"></i> Create Component
+            </a>
+            <a class="btn" data-bind="click: hideModals">Cancel</a>
+        </footer>
+    </div>
 
     <div class="editor-header">
         <div class="pull-left">
@@ -32,10 +72,11 @@
         
         <!-- Components -->
         <div class="editor-toolbar-left">
-            <h2>Components</h2>
+            <div class="pull-right btn btn-small btn-primary" data-bind="click: function() { showModal('.add-component') }"><i class="icon-plus-sign"></i> New</div>
+            <h2>Components </h2>
             <div class="scrollable-wrapper">
                 <ul class="components">
-                    <li class="top" data-bind="click: function(data, event) { displayProperties(false, event) }">UI Panel</li>
+                    <li class="top" data-bind="click: function(data, event) { displayProperties(false, event) }, text: panel.name"></li>
                 </ul>
                 <ul class="components" data-bind="foreach: components">
                     <li data-bind="click: function(data, event) { $parent.displayProperties(this, event) }, text: name"></li>
@@ -59,16 +100,50 @@
                 <div class="component label" data-bind="
                 event: { mouseup: function(data, event) {
                     var $tar = $(event.delegateTarget);
-                    this.x($tar.position().left);
-                    this.y($tar.position().top);
-                    console.log(this);
+                    var pos = $tar.position();
+                    this.x(pos.left);
+                    this.y(pos.top);
                 }},
                 style: {
                     left: x() + 'px',
                     top: y() + 'px'
                 }, 
-                text: text(),
-                "></div>
+                text: text()"></div>
+                <!-- /ko -->
+                
+                <!-- ko if: type === "button" -->
+                <div class="component button" data-bind="
+                event: { mouseup: function(data, event) {
+                    var $tar = $(event.delegateTarget);
+                    var pos = $tar.position();
+                    this.x(pos.left);
+                    this.y(pos.top);
+                }},
+                style: {
+                    left: x() + 'px',
+                    top: y() + 'px',
+                    width: width() + 'px',
+                    height: height() + 'px',
+                    lineHeight: height() + 'px'
+                }, 
+                text: text()"></div>
+                <!-- /ko -->
+                
+                <!-- ko if: type === "image" -->
+                <div class="component image" data-bind="
+                event: { mouseup: function(data, event) {
+                    var $tar = $(event.delegateTarget);
+                    var pos = $tar.position();
+                    this.x(pos.left);
+                    this.y(pos.top);
+                }},
+                style: {
+                    left: x() + 'px',
+                    top: y() + 'px',
+                    width: width() + 'px',
+                    height: height() + 'px',
+                    lineHeight: height() + 'px'
+                }"></div>
                 <!-- /ko -->
             
             </div>

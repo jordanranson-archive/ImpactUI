@@ -44,10 +44,11 @@ table {
 	border-spacing: 0;
 }
 
+
 /* ----- */
 
 body {
-    background: #202020;
+    background: #141414;
     color: #999;
     font-size: 12pt;
     font-family: "Droid Sans";
@@ -81,13 +82,116 @@ input, select {
 }
 
 input[type=text] {
-    border-bottom: solid 1px #343434;
+    border-bottom: solid 1px #202020;
 }
 
 input[type=text].input-small {
     width: 64px;
     text-align: center;
 }
+
+.btn {
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px;
+    background: #141414;
+    text-decoration: none;
+    color: #999;
+}
+
+.btn-small {
+    font-size: 9pt;
+    height: 19px;
+    line-height: 19px;
+    padding: 0 6px;
+}
+
+.btn-small i {
+    line-height: 19px;
+}
+
+.btn:hover {
+    color: #fff;
+    background: #202020;
+    border-color: #33b5e5;
+}
+
+.btn:hover i {
+    color: #33b5e5;
+}
+
+.toggle-radio input[type=radio] {
+    display: none;
+}
+
+.toggle-radio input[type=radio]:checked + label {
+    color: #fff;
+    background: #33b5e5;
+}
+
+.toggle-radio input[type=radio]:checked + label i {
+    color: #fff;
+}
+
+.toggle-radio input[type=radio] + label .icon-check-sign {
+    display: none;
+}
+
+.toggle-radio input[type=radio]:checked + label .icon-check-sign {
+    display: inline;
+}
+
+.toggle-radio input[type=radio]:checked + label .icon-sign-blank {
+    display: none;
+}
+
+
+/* Modal */
+
+.overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(30,30,30,0.5);
+    z-index: 1000;
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    width: 50%;
+    top: 100px;
+    left: 50%;
+    margin: 0 0 0 -25%;
+    padding: 40px;
+    z-index: 1100;
+    background: #0b0b0b;
+}
+
+.modal .modal-close {
+    cursor: pointer;
+}
+
+.modal .modal-close:hover {
+    color: #fff;
+}
+
+.modal h2 {
+    margin-bottom: 30px;
+    font-size: 18pt;
+}
+
+.modal footer {
+    margin-top: 30px;
+}
+
+.modal p {
+    margin-bottom: 15px;
+}
+
 
 /* Header */
 
@@ -98,7 +202,7 @@ input[type=text].input-small {
     right: 0;
     height: 51px;
     line-height: 50px;
-    box-shadow: 0 -1px 0 #343434 inset;
+    box-shadow: 0 -1px 0 #202020 inset;
     padding: 0 40px;
 }
 
@@ -146,25 +250,22 @@ input[type=text].input-small {
     width: 240px;
     box-sizing: border-box;
     padding: 10px;
-    background: #040404;
+    background: rgba(0,0,0,0.5);
     z-index: 10;
 }
 
 .editor-toolbar-left li {
     padding: 3px 3px 3px 16px;
-    margin-bottom: 1px;
     cursor: pointer;
 }
 
 .editor-toolbar-left li:hover {
-    background: #242424;
+    background: #141414;
     color: #fff;
 }
 
 .editor-toolbar-left li.selected {
-    border-bottom: solid 1px #33b5e5;
-    margin-bottom: 0px;
-    background: #242424;
+    background: #33b5e5;
     color: #fff;
 }
 
@@ -179,7 +280,7 @@ input[type=text].input-small {
     bottom: 40px;
     right: 0;
     width: 240px;
-    background: #040404;
+    background: rgba(0,0,0,0.5);
     z-index: 10;
     font-size: 10pt;
 }
@@ -202,7 +303,7 @@ input[type=text].input-small {
 }
 
 .editor-toolbar-right tr:hover td {
-    background: #242424;
+    background: #141414;
     color: #fff;
 }
 
@@ -218,18 +319,18 @@ input[type=text].input-small {
 }
 
 .editor-toolbar-right tr:first-child td {
-    border-top: solid 1px #242424;
+    border-top: solid 1px #202020;
 }
 
 .editor-toolbar-right td {
-    border-bottom: solid 1px #242424;
+    border-bottom: solid 1px #202020;
     height: 21px;
     line-height: 21px;
     padding: 2px 4px;
 }
 
 .editor-toolbar-right tr td:first-child {
-    border-right: solid 1px #242424;
+    border-right: solid 1px #202020;
 }
 
 .editor-window {
@@ -248,7 +349,16 @@ input[type=text].input-small {
     height: 0px;
     margin: -0px 0 0 -0px;
     background: #999;
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUQ1MkUyRUNDRTAzMTFFMkEyMTI4NjMyMzFCNzUyNUMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUQ1MkUyRURDRTAzMTFFMkEyMTI4NjMyMzFCNzUyNUMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5RDUyRTJFQUNFMDMxMUUyQTIxMjg2MzIzMUI3NTI1QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5RDUyRTJFQkNFMDMxMUUyQTIxMjg2MzIzMUI3NTI1QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pt5Tx+AAAAAhSURBVHjaYmAgAvz//59oRQ4Mg9hEKBhQE2G+IkQDBBgAPqgmHTFIEpkAAAAASUVORK5CYII=");
+    background-image: 
+        linear-gradient( 0deg, 
+            transparent 0px, transparent 15px, 
+            rgba(0,0,0,.1) 15px, rgba(0,0,0,.1) 16px 
+        ),
+        linear-gradient( -90deg, 
+            transparent 0px, transparent 15px, 
+            rgba(0,0,0,.1) 15px, rgba(0,0,0,.1) 16px 
+        );
+    background-size: 16px 16px;
     background-repeat: repeat;
     box-shadow: 0 5px 15px #000;
     z-index: 5;
@@ -258,6 +368,7 @@ input[type=text].input-small {
     position: absolute;
     width: 16px;
     height: 16px;
+    cursor: move;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -273,13 +384,23 @@ input[type=text].input-small {
     color: #fff;
 }
 
+.component.button {
+    color: #fff;
+    background: #666;
+    text-align: center;
+}
+
+.component.image {
+    background: #666;
+}
+
 .editor-footer {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     height: 41px;
-    box-shadow: 0 1px 0 #343434 inset;
+    box-shadow: 0 1px 0 #202020 inset;
     padding: 0 40px;
     line-height: 40px;
 }

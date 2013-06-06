@@ -1,60 +1,78 @@
-// UI panel
-function Panel() {
-    var self = this;
-    self.id = 0;
-    self.type = "panel";
-    
-    self.name = ko.observable("UI Panel");
-    self.width = ko.observable(512);
-    self.height = ko.observable(374);
-}
+// ImpactUI
+//
+// Copyright (c) 2013 All Right Reserved, Jordan Ranson - http://www.jordanranson.com/
+//
+// This source is subject to the GNU General Public License.
+// Please see the License.txt file for more information.
+// All other rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 
-// Generic UI element
-function Component() {
-    var self = this;
-    self.id = 0;
-    self.type = "none";
-    
-    self.name = ko.observable("Component");
-    self.x = ko.observable(0);
-    self.y = ko.observable(0);
-}
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 
-// Label
-function Label() {
-    var self = this;
-    self.id = 0;
-    self.type = "label";
-    
-    self.name = ko.observable("Label");
-    self.text = ko.observable("Label");
-    self.x = ko.observable(0);
-    self.y = ko.observable(0);
-}
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-// View model
-function ViewModel() {
+
+
+// Impact UI
+function App() {
     var self = this;
     self.panel = new Panel();
     self.components = ko.observableArray();
     self.properties = ko.observableArray();
     
-    
     // Initialization
     self.init = function() {
-        for(var i = 0; i < 4; i++) {
-            var c = new Label();
-            c.text = ko.observable("butts" + i);
-            self.addComponent(c);
+        
+    };
+    
+    
+    // Displays a modal dialog
+    self.showModal = function(selector) {
+        $(".overlay").fadeIn();
+        $(".modal").fadeOut();
+        $(selector).fadeIn();
+    };
+    
+    
+    // Hides all modal dialogs
+    self.hideModals = function() {
+        $(".overlay").fadeOut();
+        $(".modal").fadeOut();
+    };
+    
+    
+    // Creates a new component and adds it to the list
+    self.createComponent = function(type) {
+        var component;
+        
+        switch(type) {
+            case "label": component = new MLabel(); break;
+            case "button": component = new MButton(); break;
+            case "image": component = new MImage(); break;
+            default: component = new MComponent();
         }
+        
+        self.addComponent(component);
     };
     
     
     // Add a component
     self.addComponent = function(component) {
         self.components.push(component);
-        $(".component").draggable();
+        $(".component").draggable({ 
+            containment: ".editor-window", 
+            scroll: false,
+            grid: [ 8, 8 ]
+        });
     };
     
     
@@ -83,12 +101,14 @@ function ViewModel() {
 }
 
 
+// On page ready
 $(function() {
-    var viewModel = new ViewModel();
-    ko.applyBindings(viewModel);
+    var app = new App();
+    ko.applyBindings(app);
     
     $(".component").draggable({ 
-        containment: ".panel", 
-        scroll: false
+        containment: ".editor-window", 
+        scroll: false,
+        grid: [ 8, 8 ]
     });
 });
