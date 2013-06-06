@@ -50,6 +50,20 @@ function App() {
     };
     
     
+    // Increments/decrements value of a number range on keypress
+    self.changeRange = function(data, event) {
+        // Key up
+        if(event.which === 38) {
+            data.value(data.value() + 1);
+        }
+        
+        // Key down
+        if(event.which === 40) {
+            data.value(data.value() - 1);
+        }
+    };
+    
+    
     // Creates a new component and adds it to the list
     self.createComponent = function(type) {
         var component;
@@ -80,11 +94,16 @@ function App() {
     self.displayProperties = function(component, event) {
         var model = component === false ? self.panel : component;
         var properties = [];
-        var row;
+        var row, type, value;
         
         for (var key in model) {
             if(key !== "id" && key !== "type") {
-                row = { key: key, value: ko.observable(model[key]) };
+                type = typeof(typeof(model[key]) === "function" ? model[key]() : model[key]);
+                row = { 
+                    key: key, 
+                    value: model[key],
+                    type: type
+                };
                 properties.push(row);
             }
         }
@@ -110,5 +129,9 @@ $(function() {
         containment: ".editor-window", 
         scroll: false,
         grid: [ 8, 8 ]
+    });
+    
+    $(".panel").on("keyup", ".range", function(e) {
+        console.log(e);
     });
 });

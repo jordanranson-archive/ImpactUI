@@ -90,6 +90,10 @@ input[type=text].input-small {
     text-align: center;
 }
 
+input[type=text].range {
+    
+}
+
 .btn {
     display: inline-block;
     cursor: pointer;
