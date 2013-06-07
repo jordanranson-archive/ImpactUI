@@ -9,6 +9,7 @@ function Panel() {
     self.name = ko.observable("UI Panel");
     self.width = ko.observable(512);
     self.height = ko.observable(374);
+    self.z = ko.observable(0);
 }
 
 // Generic UI element
@@ -22,6 +23,7 @@ function MComponent() {
     self.name = ko.observable("Component");
     self.x = ko.observable(0);
     self.y = ko.observable(0);
+    self.z = ko.observable(0);
 }
 
 // Label
@@ -36,6 +38,7 @@ function MLabel() {
     self.text = ko.observable("Label");
     self.x = ko.observable(0);
     self.y = ko.observable(0);
+    self.z = ko.observable(0);
 }
 
 // Button
@@ -50,6 +53,7 @@ function MButton() {
     self.text = ko.observable("Button");
     self.x = ko.observable(0);
     self.y = ko.observable(0);
+    self.z = ko.observable(0);
     self.width = ko.observable(48);
     self.height = ko.observable(16);
 }
@@ -66,6 +70,7 @@ function MImage() {
     self.src = ko.observable("");
     self.x = ko.observable(0);
     self.y = ko.observable(0);
+    self.z = ko.observable(0);
     self.width = ko.observable(96);
     self.height = ko.observable(96);
 }

@@ -266,7 +266,7 @@ input[type=text].range {
     width: 240px;
     box-sizing: border-box;
     padding: 10px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.8);
     z-index: 10;
 }
 
@@ -296,7 +296,7 @@ input[type=text].range {
     bottom: 40px;
     right: 0;
     width: 240px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.8);
     z-index: 10;
     font-size: 10pt;
 }
@@ -405,7 +405,7 @@ input[type=text].range {
 }
 
 .component:hover {
-    box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.65);
 }
 
 .component.selected {

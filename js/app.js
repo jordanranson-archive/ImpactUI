@@ -28,7 +28,7 @@ function App() {
     self.panel = new Panel();
     self.components = ko.observableArray();
     self.properties = ko.observableArray();
-    self.zoom = ko.observable(1);
+    self.zoom = ko.observable(2);
     
     
     // Initialization
@@ -102,8 +102,6 @@ function App() {
     
     // jQuery crap
     self.bindjQuery = function() {
-        //$(".component").resizable("destroy");
-        //$(".component").draggable("destroy");
         $(".component:not(.label)").resizable({
             grid: 4 * self.zoom(),
             resize: function() {
@@ -114,6 +112,21 @@ function App() {
             containment: ".editor-content", 
             scroll: false,
             grid: [ 4 * self.zoom(), 4 * self.zoom() ]
+        });
+        $(".components-list").sortable({
+            axis: "y",
+            stop: function() {
+                var len = $(".components-list").length;
+                $(".components-list li").each(function(i) {
+                    $(this).find("input").val(i);
+                    $(this).find("input").trigger("change");
+                });
+            }
+        });
+        var len = $(".components-list").length;
+        $(".components-list li").each(function(i) {
+            $(this).find("input").val(i);
+            $(this).find("input").trigger("change");
         });
     };
     
@@ -127,6 +140,9 @@ function App() {
         for (var key in model) {
             if(key !== "id" && key !== "type" && key !== "display") {
                 type = typeof(typeof(model[key]) === "function" ? model[key]() : model[key]);
+                if(key === "z") {
+                    type = "readonly";
+                }
                 row = { 
                     key: key, 
                     value: model[key],

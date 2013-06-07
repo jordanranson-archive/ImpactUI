@@ -84,11 +84,12 @@
                         css: { selected: panel.display.selected() === true }">
                     </li>
                 </ul>
-                <ul class="components" data-bind="foreach: components">
+                <ul class="components components-list" data-bind="foreach: components">
                     <li data-bind="
-                        click: function(data, event) { $parent.displayProperties(this, event) }, 
-                        text: name,
+                        click: function(data, event) { $parent.displayProperties(this, event) },
                         css: { selected: display.selected() === true }">
+                        <span data-bind="text: name"></span>
+                        <input type="hidden" data-bind="value: z">
                     </li>
                 </ul>
             </div>
@@ -123,7 +124,8 @@
                 style: {
                     left: (x() * $parent.zoom()) + 'px',
                     top: (y() * $parent.zoom()) + 'px',
-                    fontSize: 10 * $parent.zoom() + 'px'
+                    fontSize: 10 * $parent.zoom() + 'px',
+                    zIndex: 100 - z()
                 },
                 css: { selected: display.selected() === true }">
                     <span data-bind="text: text()">
@@ -153,7 +155,8 @@
                     fontSize: 10 * $parent.zoom() + 'px',
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
-                    lineHeight: (height() * $parent.zoom()) + 'px'
+                    lineHeight: (height() * $parent.zoom()) + 'px',
+                    zIndex: 100 - z()
                 },
                 css: { selected: display.selected() === true }">
                     <span data-bind="text: text()"></span>
@@ -182,6 +185,7 @@
                     top: (y() * $parent.zoom()) + 'px',
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
+                    zIndex: 100 - z()
                 },
                 css: { selected: display.selected() === true }"></div>
                 <!-- /ko -->
@@ -211,6 +215,10 @@
                             
                             <!-- ko if: type === "string" -->
                             <td><input type="text" data-bind="value: value"></td>
+                            <!-- /ko -->
+                            
+                            <!-- ko if: type === "readonly" -->
+                            <td data-bind="text: value"></td>
                             <!-- /ko -->
                         </tr>
                     </tbody>
