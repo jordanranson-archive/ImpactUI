@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
 	<title>ImpactUI</title>
 	<link href="css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
 	<link href="css/impact-ui.css" rel="stylesheet">
 	<script src="js/jquery-1.9.1.js"></script>
 	<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -76,10 +77,18 @@
             <h2>Components </h2>
             <div class="scrollable-wrapper">
                 <ul class="components">
-                    <li class="top" data-bind="click: function(data, event) { displayProperties(false, event) }, text: panel.name"></li>
+                    <li class="top" data-bind="
+                        click: function(data, event) { displayProperties(false, event) }, 
+                        text: panel.name,
+                        css: { selected: panel.display.selected() === true }">
+                    </li>
                 </ul>
                 <ul class="components" data-bind="foreach: components">
-                    <li data-bind="click: function(data, event) { $parent.displayProperties(this, event) }, text: name"></li>
+                    <li data-bind="
+                        click: function(data, event) { $parent.displayProperties(this, event) }, 
+                        text: name,
+                        css: { selected: display.selected() === true }">
+                    </li>
                 </ul>
             </div>
         </div>
@@ -98,26 +107,42 @@
             
                 <!-- ko if: type === "label" -->
                 <div class="component label" data-bind="
-                event: { mouseup: function(data, event) {
+                event: { 
+                mouseup: function(data, event) {
                     var $tar = $(event.delegateTarget);
                     var pos = $tar.position();
                     this.x(pos.left);
                     this.y(pos.top);
+                    $parent.bindjQuery();
+                },
+                dblclick: function(data, event) {
+                    $parent.displayProperties(this, event);
                 }},
                 style: {
                     left: x() + 'px',
                     top: y() + 'px'
-                }, 
-                text: text()"></div>
+                },
+                css: { selected: display.selected() === true }">
+                    <span data-bind="text: text()">
+                </div>
                 <!-- /ko -->
                 
                 <!-- ko if: type === "button" -->
                 <div class="component button" data-bind="
-                event: { mouseup: function(data, event) {
+                event: { 
+                mouseup: function(data, event) {
                     var $tar = $(event.delegateTarget);
                     var pos = $tar.position();
+                    var w = $tar.width();
+                    var h = $tar.height();
                     this.x(pos.left);
                     this.y(pos.top);
+                    this.width(w);
+                    this.height(h);
+                    $parent.bindjQuery();
+                },
+                dblclick: function(data, event) {
+                    $parent.displayProperties(this, event);
                 }},
                 style: {
                     left: x() + 'px',
@@ -125,17 +150,28 @@
                     width: width() + 'px',
                     height: height() + 'px',
                     lineHeight: height() + 'px'
-                }, 
-                text: text()"></div>
+                },
+                css: { selected: display.selected() === true }">
+                    <span data-bind="text: text()"></span>
+                </div>
                 <!-- /ko -->
                 
                 <!-- ko if: type === "image" -->
                 <div class="component image" data-bind="
-                event: { mouseup: function(data, event) {
+                event: { 
+                mouseup: function(data, event) {
                     var $tar = $(event.delegateTarget);
                     var pos = $tar.position();
+                    var w = $tar.width();
+                    var h = $tar.height();
                     this.x(pos.left);
                     this.y(pos.top);
+                    this.width(w);
+                    this.height(h);
+                    $parent.bindjQuery();
+                },
+                dblclick: function(data, event) {
+                    $parent.displayProperties(this, event);
                 }},
                 style: {
                     left: x() + 'px',
@@ -143,7 +179,8 @@
                     width: width() + 'px',
                     height: height() + 'px',
                     lineHeight: height() + 'px'
-                }"></div>
+                },
+                css: { selected: display.selected() === true }"></div>
                 <!-- /ko -->
             
             </div>
@@ -164,11 +201,13 @@
                             <td data-bind="text: key"></td>
                             
                             <!-- ko if: type === "number" -->
-                            <td><input class="range" type="text" data-bind="event: {keydown: function(d,e) { $root.changeRange(this,e); }}, value: value()"></td>
+                            <td><input class="range" type="text" data-bind="event: {
+                            mousewheel: function(d,e) { $root.changeRangeMW(this,e); }
+                            }, value: value"></td>
                             <!-- /ko -->
                             
                             <!-- ko if: type === "string" -->
-                            <td><input type="text" data-bind="value: value()"></td>
+                            <td><input type="text" data-bind="value: value"></td>
                             <!-- /ko -->
                         </tr>
                     </tbody>

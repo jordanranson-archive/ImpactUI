@@ -373,12 +373,21 @@ input[type=text].range {
     width: 16px;
     height: 16px;
     cursor: move;
+    font-size: 8pt;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.component:hover {
+    box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+}
+
+.component.selected {
+    box-shadow: 0 0 0 1px #33b5e5;
 }
 
 .component.label {

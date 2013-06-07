@@ -63,6 +63,18 @@ function App() {
         }
     };
     
+    self.changeRangeMW = function(data, event) {
+        // Mouse wheel up
+        if(event.originalEvent.wheelDeltaY > 0) {
+            data.value(data.value() + 1);
+        }
+        
+        // Mouse wheel down
+        if(event.originalEvent.wheelDeltaY < 0) {
+            data.value(data.value() - 1);
+        }
+    };
+    
     
     // Creates a new component and adds it to the list
     self.createComponent = function(type) {
@@ -82,6 +94,17 @@ function App() {
     // Add a component
     self.addComponent = function(component) {
         self.components.push(component);
+        self.bindjQuery();
+    };
+    
+    
+    // jQuery crap
+    self.bindjQuery = function() {
+        //$(".component").resizable("destroy");
+        //$(".component").draggable("destroy");
+        $(".component:not(.label)").resizable({
+            grid: 8
+        });
         $(".component").draggable({ 
             containment: ".editor-window", 
             scroll: false,
@@ -97,7 +120,7 @@ function App() {
         var row, type, value;
         
         for (var key in model) {
-            if(key !== "id" && key !== "type") {
+            if(key !== "id" && key !== "type" && key !== "display") {
                 type = typeof(typeof(model[key]) === "function" ? model[key]() : model[key]);
                 row = { 
                     key: key, 
@@ -110,9 +133,12 @@ function App() {
         
         self.properties(properties);
         
-        var $tar = $(event.delegateTarget);
-        $tar.closest("div").find("li").removeClass("selected");
-        $tar.addClass("selected");
+        // Show selected component
+        self.panel.display.selected(false);
+        for(var i = 0; i < self.components().length; i++) {
+            self.components()[i].display.selected(false);
+        }
+        model.display.selected(true);
     };
     
     
@@ -124,12 +150,6 @@ function App() {
 $(function() {
     var app = new App();
     ko.applyBindings(app);
-    
-    $(".component").draggable({ 
-        containment: ".editor-window", 
-        scroll: false,
-        grid: [ 8, 8 ]
-    });
     
     $(".panel").on("keyup", ".range", function(e) {
         console.log(e);
