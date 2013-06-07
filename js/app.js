@@ -33,7 +33,8 @@ function App() {
     
     // Initialization
     self.init = function() {
-        
+        Mousetrap.bind("del",   self.removeComponent);
+        Mousetrap.bind("c",     self.duplicateComponent);
     };
     
     
@@ -90,6 +91,39 @@ function App() {
         }
         
         self.addComponent(component);
+    };
+    
+    
+    // Removes a component
+    self.removeComponent = function() {
+        self.components.remove(function(item) {
+            return item.display.selected() === true;
+        });
+        self.properties.removeAll();
+    };
+    
+    
+    // Creates a duplicate of a component
+    self.duplicateComponent = function() {
+        // Find the original component to be duplicated
+        var original = null;
+        for(var i = 0; i < self.components().length; i++) {
+            if(self.components()[i].display.selected() === true) {
+                original = self.components()[i];
+                break;
+            }
+        }
+        
+        // Create the duplicate component and add it to the view
+        if(original !== null) {
+            var clone = ko.mapping.fromJS(ko.mapping.toJS(original));
+            console.log(clone);
+            clone.display.selected(true);
+            original.display.selected(false);
+            
+            self.components.push(clone);
+            self.displayProperties(clone);
+        }
     };
     
     
