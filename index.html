@@ -63,6 +63,7 @@
         <div class="pull-right">
             <ul class="file-menu">
                 <li><i class="icon-save"></i> Save</li>
+                <li><i class="icon-save"></i> Save As</li>
                 <li><i class="icon-folder-open"></i> Load</li>
                 <li><i class="icon-asterisk"></i> New</li>
             </ul>
@@ -98,10 +99,11 @@
                 
             <div class="panel" data-bind="
             style: { 
-                width: panel.width() + 'px',
-                height: panel.height() + 'px',
-                marginTop: '-' + (panel.height() / 2) + 'px',
-                marginLeft: '-' + (panel.width() / 2) + 'px'
+                width: (panel.width() * zoom()) + 'px',
+                height: (panel.height() * zoom()) + 'px',
+                backgroundSize: (16 * zoom()) + 'px ' + (16 * zoom()) + 'px',
+                marginTop: '-' + ((panel.height() * zoom()) / 2) + 'px',
+                marginLeft: '-' + ((panel.width() * zoom()) / 2) + 'px'
             }, foreach: components
             ">
             
@@ -111,16 +113,17 @@
                 mouseup: function(data, event) {
                     var $tar = $(event.delegateTarget);
                     var pos = $tar.position();
-                    this.x(pos.left);
-                    this.y(pos.top);
+                    this.x(pos.left / $parent.zoom());
+                    this.y(pos.top / $parent.zoom());
                     $parent.bindjQuery();
                 },
                 dblclick: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
                 style: {
-                    left: x() + 'px',
-                    top: y() + 'px'
+                    left: (x() * $parent.zoom()) + 'px',
+                    top: (y() * $parent.zoom()) + 'px',
+                    fontSize: 10 * $parent.zoom() + 'px'
                 },
                 css: { selected: display.selected() === true }">
                     <span data-bind="text: text()">
@@ -135,21 +138,22 @@
                     var pos = $tar.position();
                     var w = $tar.width();
                     var h = $tar.height();
-                    this.x(pos.left);
-                    this.y(pos.top);
-                    this.width(w);
-                    this.height(h);
+                    this.x(pos.left / $parent.zoom());
+                    this.y(pos.top / $parent.zoom());
+                    this.width(w / $parent.zoom());
+                    this.height(h / $parent.zoom());
                     $parent.bindjQuery();
                 },
                 dblclick: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
                 style: {
-                    left: x() + 'px',
-                    top: y() + 'px',
-                    width: width() + 'px',
-                    height: height() + 'px',
-                    lineHeight: height() + 'px'
+                    left: (x() * $parent.zoom()) + 'px',
+                    top: (y() * $parent.zoom()) + 'px',
+                    fontSize: 10 * $parent.zoom() + 'px',
+                    width: (width() * $parent.zoom()) + 'px',
+                    height: (height() * $parent.zoom()) + 'px',
+                    lineHeight: (height() * $parent.zoom()) + 'px'
                 },
                 css: { selected: display.selected() === true }">
                     <span data-bind="text: text()"></span>
@@ -164,21 +168,20 @@
                     var pos = $tar.position();
                     var w = $tar.width();
                     var h = $tar.height();
-                    this.x(pos.left);
-                    this.y(pos.top);
-                    this.width(w);
-                    this.height(h);
+                    this.x(pos.left / $parent.zoom());
+                    this.y(pos.top / $parent.zoom());
+                    this.width(w / $parent.zoom());
+                    this.height(h / $parent.zoom());
                     $parent.bindjQuery();
                 },
                 dblclick: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
                 style: {
-                    left: x() + 'px',
-                    top: y() + 'px',
-                    width: width() + 'px',
-                    height: height() + 'px',
-                    lineHeight: height() + 'px'
+                    left: (x() * $parent.zoom()) + 'px',
+                    top: (y() * $parent.zoom()) + 'px',
+                    width: (width() * $parent.zoom()) + 'px',
+                    height: (height() * $parent.zoom()) + 'px',
                 },
                 css: { selected: display.selected() === true }"></div>
                 <!-- /ko -->
@@ -219,7 +222,10 @@
     
     <div class="editor-footer">
         <div class="pull-left">
-            <!--<label>Zoom</label> <input class="input-small" type="text" value="1">-->
+            <label>Scale</label>
+            <a class="btn btn-small" data-bind="click: function(d,e) { zoom(Math.max(zoom() - 1, 1)); bindjQuery(); }"><i class="icon-minus-sign"></i></a>
+            <span data-bind="text: zoom"></span>
+            <a class="btn btn-small" data-bind="click: function(d,e) { zoom(Math.min(zoom() + 1, 4)); bindjQuery(); }"><i class="icon-plus-sign"></i></a>
         </div>
         <div class="pull-right">
             <small>ImpactUI &copy; 2013 <a href="http://www.jordanranson.com" target="_blank">Jordan Ranson</a></small>

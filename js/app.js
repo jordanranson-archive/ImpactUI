@@ -28,6 +28,8 @@ function App() {
     self.panel = new Panel();
     self.components = ko.observableArray();
     self.properties = ko.observableArray();
+    self.zoom = ko.observable(1);
+    
     
     // Initialization
     self.init = function() {
@@ -66,12 +68,12 @@ function App() {
     self.changeRangeMW = function(data, event) {
         // Mouse wheel up
         if(event.originalEvent.wheelDeltaY > 0) {
-            data.value(data.value() + 1);
+            data.value(data.value() + 4);
         }
         
         // Mouse wheel down
         if(event.originalEvent.wheelDeltaY < 0) {
-            data.value(data.value() - 1);
+            data.value(data.value() - 4);
         }
     };
     
@@ -103,12 +105,15 @@ function App() {
         //$(".component").resizable("destroy");
         //$(".component").draggable("destroy");
         $(".component:not(.label)").resizable({
-            grid: 8
+            grid: 4 * self.zoom(),
+            resize: function() {
+                $(this).css("line-height", $(this).height() + "px");
+            }
         });
         $(".component").draggable({ 
-            containment: ".editor-window", 
+            containment: ".editor-content", 
             scroll: false,
-            grid: [ 8, 8 ]
+            grid: [ 4 * self.zoom(), 4 * self.zoom() ]
         });
     };
     
@@ -151,7 +156,11 @@ $(function() {
     var app = new App();
     ko.applyBindings(app);
     
-    $(".panel").on("keyup", ".range", function(e) {
+    $(".panel")
+    .on("keyup", ".range", function(e) {
         console.log(e);
+    })
+    .draggable({ 
+        scroll: false
     });
 });

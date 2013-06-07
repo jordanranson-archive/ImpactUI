@@ -47,6 +47,10 @@ table {
 
 /* ----- */
 
+html, body {
+    overflow: hidden;
+}
+
 body {
     background: #141414;
     color: #999;
@@ -201,6 +205,7 @@ input[type=text].range {
 
 .editor-header {
     position: absolute;
+    background: #141414;
     top: 0;
     left: 0;
     right: 0;
@@ -208,6 +213,13 @@ input[type=text].range {
     line-height: 50px;
     box-shadow: 0 -1px 0 #202020 inset;
     padding: 0 40px;
+    z-index: 20;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .masthead {
@@ -355,17 +367,27 @@ input[type=text].range {
     background: #999;
     background-image: 
         linear-gradient( 0deg, 
-            transparent 0px, transparent 15px, 
-            rgba(0,0,0,.1) 15px, rgba(0,0,0,.1) 16px 
+            transparent 0%, 
+            transparent 93.75%, 
+            rgba(0,0,0,.1) 93.75%, 
+            rgba(0,0,0,.1) 100% 
         ),
         linear-gradient( -90deg, 
-            transparent 0px, transparent 15px, 
-            rgba(0,0,0,.1) 15px, rgba(0,0,0,.1) 16px 
+            transparent 0%, 
+            transparent 93.75%, 
+            rgba(0,0,0,.1) 93.75%, 
+            rgba(0,0,0,.1) 100% 
         );
     background-size: 16px 16px;
     background-repeat: repeat;
     box-shadow: 0 5px 15px #000;
     z-index: 5;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .component {
@@ -387,7 +409,7 @@ input[type=text].range {
 }
 
 .component.selected {
-    box-shadow: 0 0 0 1px #33b5e5;
+    box-shadow: 0 0 0 2px #33b5e5;
 }
 
 .component.label {
@@ -409,6 +431,7 @@ input[type=text].range {
 
 .editor-footer {
     position: absolute;
+    background: #141414;
     bottom: 0;
     left: 0;
     right: 0;
@@ -416,6 +439,13 @@ input[type=text].range {
     box-shadow: 0 1px 0 #202020 inset;
     padding: 0 40px;
     line-height: 40px;
+    z-index: 20;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .editor-footer small {
