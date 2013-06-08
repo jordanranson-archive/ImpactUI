@@ -53,32 +53,6 @@ function App() {
     };
     
     
-    // Increments/decrements value of a number range on keypress
-    self.changeRange = function(data, event) {
-        // Key up
-        if(event.which === 38) {
-            data.value(data.value() + 1);
-        }
-        
-        // Key down
-        if(event.which === 40) {
-            data.value(data.value() - 1);
-        }
-    };
-    
-    self.changeRangeMW = function(data, event) {
-        // Mouse wheel up
-        if(event.originalEvent.wheelDeltaY > 0) {
-            data.value(data.value() + 4);
-        }
-        
-        // Mouse wheel down
-        if(event.originalEvent.wheelDeltaY < 0) {
-            data.value(data.value() - 4);
-        }
-    };
-    
-    
     // Creates a new component and adds it to the list
     self.createComponent = function(type) {
         var component;
@@ -131,6 +105,12 @@ function App() {
     self.addComponent = function(component) {
         self.components.push(component);
         self.bindjQuery();
+        
+        for(var i = 0; i < self.components().length; i++) {
+            self.components()[i].display.selected(false)
+        }
+        self.panel.display.selected(false);
+        component.display.selected(true);
     };
     
     
@@ -141,6 +121,9 @@ function App() {
             resize: function() {
                 $(this).css("line-height", $(this).height() + "px");
             }
+        });
+        $(".component.label").resizable({
+            grid: 4 * self.zoom()
         });
         $(".component").draggable({ 
             containment: ".editor-content", 
@@ -171,12 +154,22 @@ function App() {
         var properties = [];
         var row, type, value;
         
+        console.log(model);
         for (var key in model) {
             if(key !== "id" && key !== "type" && key !== "display") {
-                type = typeof(typeof(model[key]) === "function" ? model[key]() : model[key]);
-                if(key === "z") {
+                
+                if(key === "z") 
                     type = "readonly";
-                }
+                else if(key === "lineHeight") 
+                    type = "lineHeight";
+                else if(key === "x" || key === "y" || key === "z") 
+                    type = "position";
+                else if(key === "width" || key === "height") 
+                    type = "size";
+                else 
+                    type = "string";
+                
+                console.log(key, type);
                 row = { 
                     key: key, 
                     value: model[key],

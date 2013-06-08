@@ -39,6 +39,9 @@ function MLabel() {
     self.x = ko.observable(0);
     self.y = ko.observable(0);
     self.z = ko.observable(0);
+    self.width = ko.observable(32);
+    self.height = ko.observable(12);
+    self.lineHeight = ko.observable(1.2);
 }
 
 // Button

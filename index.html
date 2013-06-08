@@ -115,16 +115,23 @@
                 mouseup: function(data, event) {
                     var $tar = $(event.delegateTarget);
                     var pos = $tar.position();
+                    var w = $tar.width();
+                    var h = $tar.height();
                     this.x(pos.left / $parent.zoom());
                     this.y(pos.top / $parent.zoom());
+                    this.width(w / $parent.zoom());
+                    this.height(h / $parent.zoom());
                     $parent.bindjQuery();
                 },
-                dblclick: function(data, event) {
+                mousedown: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
                 style: {
                     left: (x() * $parent.zoom()) + 'px',
                     top: (y() * $parent.zoom()) + 'px',
+                    width: (width() * $parent.zoom()) + 'px',
+                    height: (height() * $parent.zoom()) + 'px',
+                    lineHeight: lineHeight(),
                     fontSize: 10 * $parent.zoom() + 'px',
                     zIndex: 100 - z()
                 },
@@ -147,7 +154,7 @@
                     this.height(h / $parent.zoom());
                     $parent.bindjQuery();
                 },
-                dblclick: function(data, event) {
+                mousedown: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
                 style: {
@@ -178,7 +185,7 @@
                     this.height(h / $parent.zoom());
                     $parent.bindjQuery();
                 },
-                dblclick: function(data, event) {
+                mousedown: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
                 style: {
@@ -208,10 +215,16 @@
                         <tr>
                             <td data-bind="text: key"></td>
                             
-                            <!-- ko if: type === "number" -->
-                            <td><input class="range" type="text" data-bind="event: {
-                            mousewheel: function(d,e) { $root.changeRangeMW(this,e); }
-                            }, value: value"></td>
+                            <!-- ko if: type === "position" -->
+                            <td><input class="range" type="number" step="4" data-bind="value: value"></td>
+                            <!-- /ko -->
+                            
+                            <!-- ko if: type === "size" -->
+                            <td><input class="range" type="number" min="0" step="4" data-bind="value: value"></td>
+                            <!-- /ko -->
+                            
+                            <!-- ko if: type === "lineHeight" -->
+                            <td><input class="range" type="number" min="1" step="0.2" data-bind="value: value"></td>
                             <!-- /ko -->
                             
                             <!-- ko if: type === "string" -->

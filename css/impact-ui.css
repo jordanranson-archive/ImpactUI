@@ -85,17 +85,15 @@ input, select {
     color: #999;
 }
 
-input[type=text] {
+input[type=text], 
+input[type=number] {
     border-bottom: solid 1px #202020;
 }
 
-input[type=text].input-small {
+input[type=text].input-small,
+input[type=number].input-small {
     width: 64px;
     text-align: center;
-}
-
-input[type=text].range {
-    
 }
 
 .btn {
@@ -307,6 +305,7 @@ input[type=text].range {
 }
 
 .editor-toolbar-right input[type=text], 
+.editor-toolbar-right input[type=number], 
 .editor-toolbar-right select {
     height: 21px;
     border: none;
@@ -324,8 +323,10 @@ input[type=text].range {
 }
 
 .editor-toolbar-right tr:hover input[type=text],
+.editor-toolbar-right tr:hover input[type=number],
 .editor-toolbar-right tr:hover select,
 .editor-toolbar-right input[type=text]:focus,
+.editor-toolbar-right input[type=number]:focus,
 .editor-toolbar-right select:focus {
     color: #fff;
 }
@@ -405,7 +406,7 @@ input[type=text].range {
 }
 
 .component:hover {
-    box-shadow: 0 0 0 1px rgba(0,0,0,.65);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.5);
 }
 
 .component.selected {
@@ -415,7 +416,7 @@ input[type=text].range {
 .component.label {
     width: auto;
     height: 14px;
-    line-height: 14px;
+    line-height: 1.2;
     color: #fff;
 }
 
