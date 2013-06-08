@@ -118,8 +118,8 @@
                     var pos = $tar.position();
                     var w = $tar.width();
                     var h = $tar.height();
-                    this.x(pos.left / $parent.zoom());
-                    this.y(pos.top / $parent.zoom());
+                    this.x((pos.left / $parent.zoom()) - originX());
+                    this.y((pos.top / $parent.zoom()) - originY());
                     this.width(w / $parent.zoom());
                     this.height(h / $parent.zoom());
                     $parent.bindjQuery();
@@ -128,8 +128,8 @@
                     $parent.displayProperties(this, event);
                 }},
                 style: {
-                    left: (x() * $parent.zoom()) + 'px',
-                    top: (y() * $parent.zoom()) + 'px',
+                    left: ((Number(originX()) + Number(x())) * $parent.zoom()) + 'px',
+                    top: ((Number(originY()) + Number(y())) * $parent.zoom()) + 'px',
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
                     lineHeight: lineHeight(),
@@ -149,8 +149,8 @@
                     var pos = $tar.position();
                     var w = $tar.width();
                     var h = $tar.height();
-                    this.x(pos.left / $parent.zoom());
-                    this.y(pos.top / $parent.zoom());
+                    this.x((pos.left / $parent.zoom()) - originX());
+                    this.y((pos.top / $parent.zoom()) - originY());
                     this.width(w / $parent.zoom());
                     this.height(h / $parent.zoom());
                     $parent.bindjQuery();
@@ -159,8 +159,8 @@
                     $parent.displayProperties(this, event);
                 }},
                 style: {
-                    left: (x() * $parent.zoom()) + 'px',
-                    top: (y() * $parent.zoom()) + 'px',
+                    left: ((Number(originX()) + Number(x())) * $parent.zoom()) + 'px',
+                    top: ((Number(originY()) + Number(y())) * $parent.zoom()) + 'px',
                     fontSize: 10 * $parent.zoom() + 'px',
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
@@ -180,8 +180,8 @@
                     var pos = $tar.position();
                     var w = $tar.width();
                     var h = $tar.height();
-                    this.x(pos.left / $parent.zoom());
-                    this.y(pos.top / $parent.zoom());
+                    this.x((pos.left / $parent.zoom()) - originX());
+                    this.y((pos.top / $parent.zoom()) - originY());
                     this.width(w / $parent.zoom());
                     this.height(h / $parent.zoom());
                     $parent.bindjQuery();
@@ -190,8 +190,8 @@
                     $parent.displayProperties(this, event);
                 }},
                 style: {
-                    left: (x() * $parent.zoom()) + 'px',
-                    top: (y() * $parent.zoom()) + 'px',
+                    left: ((Number(originX()) + Number(x())) * $parent.zoom()) + 'px',
+                    top: ((Number(originY()) + Number(y())) * $parent.zoom()) + 'px',
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
                     zIndex: 100 - z()
@@ -238,23 +238,23 @@
                             
                             <!-- ko if: type === "anchor" -->
                             <td class="property-anchor">
-                                <input type="radio" name="anchor" id="a-tl" value="topleft" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-tl" value="top-left" data-bind="checked: value">
                                 <label for="a-tl"></label>
-                                <input type="radio" name="anchor" id="a-tc" value="topcenter" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-tc" value="top-center" data-bind="checked: value">
                                 <label for="a-tc"></label>
-                                <input type="radio" name="anchor" id="a-tr" value="topright" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-tr" value="top-right" data-bind="checked: value">
                                 <label for="a-tr"></label>
-                                <input type="radio" name="anchor" id="a-l" value="left" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-l" value="center-left" data-bind="checked: value">
                                 <label for="a-l"></label>
-                                <input type="radio" name="anchor" id="a-c" value="center" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-c" value="center-center" data-bind="checked: value">
                                 <label for="a-c"></label>
-                                <input type="radio" name="anchor" id="a-r" value="right" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-r" value="center-right" data-bind="checked: value">
                                 <label for="a-r"></label>
-                                <input type="radio" name="anchor" id="a-bl" value="bottomleft" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-bl" value="bottom-left" data-bind="checked: value">
                                 <label for="a-bl"></label>
-                                <input type="radio" name="anchor" id="a-bc" value="bottomcenter" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-bc" value="bottom-center" data-bind="checked: value">
                                 <label for="a-bc"></label>
-                                <input type="radio" name="anchor" id="a-br" value="bottomright" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-br" value="bottom-right" data-bind="checked: value">
                                 <label for="a-br"></label>
                             </td>
                             <!-- /ko -->
