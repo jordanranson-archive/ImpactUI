@@ -34,7 +34,6 @@ function App() {
     // Initialization
     self.init = function() {
         Mousetrap.bind("del",   self.removeComponent);
-        Mousetrap.bind("c",     self.duplicateComponent);
     };
     
     
@@ -77,30 +76,6 @@ function App() {
     };
     
     
-    // Creates a duplicate of a component
-    self.duplicateComponent = function() {
-        // Find the original component to be duplicated
-        var original = null;
-        for(var i = 0; i < self.components().length; i++) {
-            if(self.components()[i].display.selected() === true) {
-                original = self.components()[i];
-                break;
-            }
-        }
-        
-        // Create the duplicate component and add it to the view
-        if(original !== null) {
-            var clone = ko.mapping.fromJS(ko.mapping.toJS(original));
-            console.log(clone);
-            clone.display.selected(true);
-            original.display.selected(false);
-            
-            self.components.push(clone);
-            self.displayProperties(clone);
-        }
-    };
-    
-    
     // Add a component
     self.addComponent = function(component) {
         self.components.push(component);
@@ -111,6 +86,7 @@ function App() {
         }
         self.panel.display.selected(false);
         component.display.selected(true);
+        self.displayProperties(component);
     };
     
     
@@ -149,12 +125,11 @@ function App() {
     
     
     // Displays a models properties in the side bar
-    self.displayProperties = function(component, event) {
+    self.displayProperties = function(component) {
         var model = component === false ? self.panel : component;
         var properties = [];
         var row, type, value;
         
-        console.log(model);
         for (var key in model) {
             if(key !== "id" && key !== "type" && key !== "display") {
                 
@@ -166,10 +141,11 @@ function App() {
                     type = "position";
                 else if(key === "width" || key === "height") 
                     type = "size";
+                else if(key === "anchor")
+                    type = "anchor";
                 else 
                     type = "string";
                 
-                console.log(key, type);
                 row = { 
                     key: key, 
                     value: model[key],
@@ -200,9 +176,6 @@ $(function() {
     ko.applyBindings(app);
     
     $(".panel")
-    .on("keyup", ".range", function(e) {
-        console.log(e);
-    })
     .draggable({ 
         scroll: false
     });

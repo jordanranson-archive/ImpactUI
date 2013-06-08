@@ -11,6 +11,7 @@
 	<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="js/mousetrap.min.js"></script>
     <script src="js/knockout-2.2.1.js"></script>
+    <script src="js/knockout.mapping-latest.js"></script>
     <script src="js/models.js"></script>
 	<script src="js/app.js"></script>
 	<script>
@@ -233,6 +234,29 @@
                             
                             <!-- ko if: type === "readonly" -->
                             <td data-bind="text: value"></td>
+                            <!-- /ko -->
+                            
+                            <!-- ko if: type === "anchor" -->
+                            <td class="property-anchor">
+                                <input type="radio" name="anchor" id="a-tl" value="topleft" data-bind="checked: value">
+                                <label for="a-tl"></label>
+                                <input type="radio" name="anchor" id="a-tc" value="topcenter" data-bind="checked: value">
+                                <label for="a-tc"></label>
+                                <input type="radio" name="anchor" id="a-tr" value="topright" data-bind="checked: value">
+                                <label for="a-tr"></label>
+                                <input type="radio" name="anchor" id="a-l" value="left" data-bind="checked: value">
+                                <label for="a-l"></label>
+                                <input type="radio" name="anchor" id="a-c" value="center" data-bind="checked: value">
+                                <label for="a-c"></label>
+                                <input type="radio" name="anchor" id="a-r" value="right" data-bind="checked: value">
+                                <label for="a-r"></label>
+                                <input type="radio" name="anchor" id="a-bl" value="bottomleft" data-bind="checked: value">
+                                <label for="a-bl"></label>
+                                <input type="radio" name="anchor" id="a-bc" value="bottomcenter" data-bind="checked: value">
+                                <label for="a-bc"></label>
+                                <input type="radio" name="anchor" id="a-br" value="bottomright" data-bind="checked: value">
+                                <label for="a-br"></label>
+                            </td>
                             <!-- /ko -->
                         </tr>
                     </tbody>
