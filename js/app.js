@@ -211,8 +211,6 @@ function App() {
             default: component = new MComponent();
         }
         
-        console.log(component);
-        component.panel = app.panel;
         app.addComponent(component);
     };
     
@@ -279,10 +277,25 @@ function App() {
         var model = component === false ? app.panel : component;
         var properties = [];
         var row, type, value;
+        var hiddenKeys = [
+            "id",
+            "type",
+            "display",
+            "originX",
+            "originY"
+        ];
         
         for (var key in model) {
-            if(key !== "id" && key !== "type" && key !== "display") {
-                
+            // Hide certain keys
+            var hidden = false;
+            for(var i = 0; i < hiddenKeys.length; i++) {
+                if(hiddenKeys[i] === key) {
+                    hidden = true;
+                    break;
+                }
+            }
+            
+            if(!hidden) {
                 if(key === "z") 
                     type = "readonly";
                 else if(key === "lineHeight") 
