@@ -83,13 +83,13 @@
                     <li class="top" data-bind="
                         click: function(data, event) { displayProperties(false, event) }, 
                         text: panel.name,
-                        css: { selected: panel.display.selected() === true }">
+                        css: { selected: panel._impactui.selected() === true }">
                     </li>
                 </ul>
                 <ul class="components components-list" data-bind="foreach: components">
                     <li data-bind="
                         click: function(data, event) { $parent.displayProperties(this, event) },
-                        css: { selected: display.selected() === true }">
+                        css: { selected: _impactui.selected() === true }">
                         <span data-bind="text: name"></span>
                         <input type="hidden" data-bind="value: z">
                     </li>
@@ -134,9 +134,10 @@
                     height: (height() * $parent.zoom()) + 'px',
                     lineHeight: lineHeight(),
                     fontSize: 10 * $parent.zoom() + 'px',
-                    zIndex: 100 - z()
+                    zIndex: 100 - z(),
+                    textShadow: textShadow()
                 },
-                css: { selected: display.selected() === true }">
+                css: { selected: _impactui.selected() === true }">
                     <span data-bind="text: text()">
                 </div>
                 <!-- /ko -->
@@ -165,9 +166,11 @@
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
                     lineHeight: (height() * $parent.zoom()) + 'px',
-                    zIndex: 100 - z()
+                    zIndex: 100 - z(),
+                    textShadow: _impactui.textShadow(),
+                    boxShadow: _impactui.boxShadow()
                 },
-                css: { selected: display.selected() === true }">
+                css: { selected: _impactui.selected() === true }">
                     <span data-bind="text: text()"></span>
                 </div>
                 <!-- /ko -->
@@ -196,7 +199,7 @@
                     height: (height() * $parent.zoom()) + 'px',
                     zIndex: 100 - z()
                 },
-                css: { selected: display.selected() === true }"></div>
+                css: { selected: _impactui.selected() === true }"></div>
                 <!-- /ko -->
             
             </div>

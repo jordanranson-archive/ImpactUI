@@ -36,8 +36,8 @@ function App() {
         var self = this;
         self.id = 0;
         self.type = "panel";
-        self.display = {};
-        self.display.selected = ko.observable(false);
+        self._impactui = {};
+        self._impactui.selected = ko.observable(false);
         
         self.name = ko.observable("UI Panel");
         self.width = ko.observable(512);
@@ -51,8 +51,8 @@ function App() {
         self.id = 0;
         self.type = "none";
 
-        self.display = {};
-        self.display.selected = ko.observable(false);
+        self._impactui = {};
+        self._impactui.selected = ko.observable(false);
         
         self.name = ko.observable("Component");
         self.x = ko.observable(0);
@@ -75,12 +75,13 @@ function App() {
         self.id = 0;
         self.type = "label";
         
-        self.display = {};
-        self.display.selected = ko.observable(false);
+        self._impactui = {};
+        self._impactui.selected = ko.observable(false);
         
         self.name = ko.observable("Label");
         self.text = ko.observable("Label");
         self.font = ko.observable("04b03");
+        self.textShadow = ko.observable("1px 1px #222");
         self.x = ko.observable(0);
         self.y = ko.observable(0);
         self.z = ko.observable(0);
@@ -104,11 +105,10 @@ function App() {
         self.id = 0;
         self.type = "button";
         
-        self.display = {};
-        self.display.selected = ko.observable(false);
-        
         self.name = ko.observable("Button");
         self.text = ko.observable("Button");
+        self.textShadow = ko.observable("1px 1px #222");
+        self.boxShadow = ko.observable("1px 1px #222");
         self.x = ko.observable(0);
         self.y = ko.observable(0);
         self.z = ko.observable(0);
@@ -123,6 +123,28 @@ function App() {
             var anchor = self.anchor().split("-")[0];
             return app.drawOffset(anchor, 0, app.panel.height(), true);
         });
+        
+        
+        // Web app specific parameters
+        self._impactui = {};
+        self._impactui.selected = ko.observable(false);
+        /*self._impactui.left = ko.computedObservable(function() {
+            ((Number(originX()) + Number(x())) * $parent.zoom()) + 'px'
+        });*/
+        self._impactui.textShadow = ko.computed(function() {
+            var str = self.textShadow().split(" ");
+            var shadow = (Number(str[0].replace("px","")) * app.zoom()) + "px " +
+                         (Number(str[1].replace("px","")) * app.zoom()) + "px " +
+                         str[2]
+            return shadow;
+        });
+        self._impactui.boxShadow = ko.computed(function() {
+            var str = self.boxShadow().split(" ");
+            var shadow = (Number(str[0].replace("px","")) * app.zoom()) + "px " +
+                         (Number(str[1].replace("px","")) * app.zoom()) + "px " +
+                         str[2]
+            return shadow;
+        });
     }
 
     // Image
@@ -131,8 +153,8 @@ function App() {
         self.id = 0;
         self.type = "image";
         
-        self.display = {};
-        self.display.selected = ko.observable(false);
+        self._impactui = {};
+        self._impactui.selected = ko.observable(false);
         
         self.name = ko.observable("Image");
         self.src = ko.observable("");
@@ -218,7 +240,7 @@ function App() {
     // Removes a component
     app.removeComponent = function() {
         app.components.remove(function(item) {
-            return item.display.selected() === true;
+            return item._impactui.selected() === true;
         });
         app.properties.removeAll();
     };
@@ -230,10 +252,10 @@ function App() {
         app.bindjQuery();
         
         for(var i = 0; i < app.components().length; i++) {
-            app.components()[i].display.selected(false)
+            app.components()[i]._impactui.selected(false)
         }
-        app.panel.display.selected(false);
-        component.display.selected(true);
+        app.panel._impactui.selected(false);
+        component._impactui.selected(true);
         app.displayProperties(component);
     };
     
@@ -280,7 +302,7 @@ function App() {
         var hiddenKeys = [
             "id",
             "type",
-            "display",
+            "_impactui",
             "originX",
             "originY"
         ];
@@ -321,11 +343,11 @@ function App() {
         app.properties(properties);
         
         // Show selected component
-        app.panel.display.selected(false);
+        app.panel._impactui.selected(false);
         for(var i = 0; i < app.components().length; i++) {
-            app.components()[i].display.selected(false);
+            app.components()[i]._impactui.selected(false);
         }
-        model.display.selected(true);
+        model._impactui.selected(true);
     };
     
     
@@ -335,8 +357,8 @@ function App() {
 
 // On page ready
 $(function() {
-    var app = new App();
-    ko.applyBindings(app);
+    var application = new App();
+    ko.applyBindings(application);
     
     $(".panel")
     .draggable({ 

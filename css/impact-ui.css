@@ -445,11 +445,13 @@ tr:hover .property-anchor input:checked + label {
 }
 
 .component:hover {
-    box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+    border: solid 1px rgba(0,0,0,.5);
+    margin: -1px 0 0 -1px;
 }
 
 .component.selected {
-    box-shadow: 0 0 0 2px #33b5e5;
+    border: solid 2px #33b5e5;
+    margin: -2px 0 0 -2px;
 }
 
 .component.label {
