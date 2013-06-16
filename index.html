@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="us">
 <head>
@@ -135,7 +134,7 @@
                     lineHeight: lineHeight(),
                     fontSize: 10 * $parent.zoom() + 'px',
                     zIndex: 100 - z(),
-                    textShadow: textShadow()
+                    textShadow: _impactui.textShadow()
                 },
                 css: { selected: _impactui.selected() === true }">
                     <span data-bind="text: text()">
@@ -160,8 +159,8 @@
                     $parent.displayProperties(this, event);
                 }},
                 style: {
-                    left: ((Number(originX()) + Number(x())) * $parent.zoom()) + 'px',
-                    top: ((Number(originY()) + Number(y())) * $parent.zoom()) + 'px',
+                    left: _impactui.left(),
+                    top: _impactui.top(),
                     fontSize: 10 * $parent.zoom() + 'px',
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
@@ -193,8 +192,8 @@
                     $parent.displayProperties(this, event);
                 }},
                 style: {
-                    left: ((Number(originX()) + Number(x())) * $parent.zoom()) + 'px',
-                    top: ((Number(originY()) + Number(y())) * $parent.zoom()) + 'px',
+                    left: _impactui.left(),
+                    top: _impactui.top(),
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
                     zIndex: 100 - z()

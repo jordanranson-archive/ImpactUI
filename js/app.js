@@ -75,9 +75,6 @@ function App() {
         self.id = 0;
         self.type = "label";
         
-        self._impactui = {};
-        self._impactui.selected = ko.observable(false);
-        
         self.name = ko.observable("Label");
         self.text = ko.observable("Label");
         self.font = ko.observable("04b03");
@@ -96,6 +93,24 @@ function App() {
         self.originY = ko.computed(function() {
             var anchor = self.anchor().split("-")[0];
             return app.drawOffset(anchor, 0, app.panel.height(), true);
+        });
+        
+        
+        // Web app specific parameters
+        self._impactui = {};
+        self._impactui.selected = ko.observable(false);
+        self._impactui.left = ko.computed(function() {
+            return ((Number(self.originX()) + Number(self.x())) * app.zoom()) + 'px'
+        });
+        self._impactui.top = ko.computed(function() {
+            return ((Number(self.originY()) + Number(self.y())) * app.zoom()) + 'px'
+        });
+        self._impactui.textShadow = ko.computed(function() {
+            var str = self.textShadow().split(" ");
+            var shadow = (Number(str[0].replace("px","")) * app.zoom()) + "px " +
+                         (Number(str[1].replace("px","")) * app.zoom()) + "px " +
+                         str[2]
+            return shadow;
         });
     }
 
@@ -128,9 +143,12 @@ function App() {
         // Web app specific parameters
         self._impactui = {};
         self._impactui.selected = ko.observable(false);
-        /*self._impactui.left = ko.computedObservable(function() {
-            ((Number(originX()) + Number(x())) * $parent.zoom()) + 'px'
-        });*/
+        self._impactui.left = ko.computed(function() {
+            return ((Number(self.originX()) + Number(self.x())) * app.zoom()) + 'px'
+        });
+        self._impactui.top = ko.computed(function() {
+            return ((Number(self.originY()) + Number(self.y())) * app.zoom()) + 'px'
+        });
         self._impactui.textShadow = ko.computed(function() {
             var str = self.textShadow().split(" ");
             var shadow = (Number(str[0].replace("px","")) * app.zoom()) + "px " +
@@ -153,9 +171,6 @@ function App() {
         self.id = 0;
         self.type = "image";
         
-        self._impactui = {};
-        self._impactui.selected = ko.observable(false);
-        
         self.name = ko.observable("Image");
         self.src = ko.observable("");
         self.x = ko.observable(0);
@@ -171,6 +186,17 @@ function App() {
         self.originY = ko.computed(function() {
             var anchor = self.anchor().split("-")[0];
             return app.drawOffset(anchor, 0, app.panel.height(), true);
+        });
+        
+        
+        // Web app specific parameters
+        self._impactui = {};
+        self._impactui.selected = ko.observable(false);
+        self._impactui.left = ko.computed(function() {
+            return ((Number(self.originX()) + Number(self.x())) * app.zoom()) + 'px'
+        });
+        self._impactui.top = ko.computed(function() {
+            return ((Number(self.originY()) + Number(self.y())) * app.zoom()) + 'px'
         });
     }
     
