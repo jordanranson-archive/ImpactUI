@@ -220,7 +220,6 @@ function App() {
                     return Number(pos) + Number(panel);
             }
         } else {
-            console.log(anchor);
             switch(anchor) {
                 case "left":
                     return Number(pos);
@@ -259,6 +258,7 @@ function App() {
             default: component = new MComponent();
         }
         
+        app.align(component);
         app.addComponent(component);
     };
     
@@ -269,6 +269,31 @@ function App() {
             return item._impactui.selected() === true;
         });
         app.properties.removeAll();
+    };
+    
+    
+    // Aligns the component to the grid
+    app.align = function(component) {  
+    
+        var anchor = component.anchor().split("-");
+        component.x(0);
+        component.y(0);
+        
+        // Finds remainder 
+        if(app.panel.width / 16 % 1 !== 1 && (anchor[1] === "center" || anchor[1] === "right")) {
+            component.x((app.panel.width() / 16 % 1) * 16);
+        }
+        
+        if(app.panel.height / 16 % 1 !== 1 && (anchor[0] === "center" || anchor[0] === "bottom")) {
+            component.y((app.panel.height() / 16 % 1) * 16);
+        }
+    };
+    
+    
+    // Realigns the component to the grid
+    app.realign = function() {
+        app.align(app.getSelected());
+        return true;
     };
     
     
@@ -283,6 +308,38 @@ function App() {
         app.panel._impactui.selected(false);
         component._impactui.selected(true);
         app.displayProperties(component);
+    };
+    
+    
+    // Updates a component when moved in the gui
+    app.updateComponent = function() {
+        var component = app.getSelected();
+        var $tar = $(".component.selected");
+        
+        if($tar.length > 0) {
+            var pos = $tar.position();
+            var w = $tar.width();
+            var h = $tar.height();
+            
+            component.x((pos.left / app.zoom()) - component.originX());
+            component.y((pos.top / app.zoom()) - component.originY());
+            component.width(w / app.zoom());
+            component.height(h / app.zoom());
+            
+            app.bindjQuery();
+        }
+    },
+    
+    
+    // Gets the currently selected component
+    app.getSelected = function() {
+        for(var i = 0; i < app.components().length; i++) {
+            if(app.components()[i]._impactui.selected() === true) {
+                return app.components()[i];
+            }
+        }
+        
+        return null;
     };
     
     
@@ -385,6 +442,12 @@ function App() {
 $(function() {
     var application = new App();
     ko.applyBindings(application);
+    
+    document.body.addEventListener("mouseup", function() {
+        application.updateComponent();
+        
+        return true;
+    }, true);
     
     $(".panel")
     .draggable({ 

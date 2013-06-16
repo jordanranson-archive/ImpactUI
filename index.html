@@ -112,17 +112,6 @@
                 <!-- ko if: type === "label" -->
                 <div class="component label" data-bind="
                 event: { 
-                mouseup: function(data, event) {
-                    var $tar = $(event.delegateTarget);
-                    var pos = $tar.position();
-                    var w = $tar.width();
-                    var h = $tar.height();
-                    this.x((pos.left / $parent.zoom()) - originX());
-                    this.y((pos.top / $parent.zoom()) - originY());
-                    this.width(w / $parent.zoom());
-                    this.height(h / $parent.zoom());
-                    $parent.bindjQuery();
-                },
                 mousedown: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
@@ -144,17 +133,6 @@
                 <!-- ko if: type === "button" -->
                 <div class="component button" data-bind="
                 event: { 
-                mouseup: function(data, event) {
-                    var $tar = $(event.delegateTarget);
-                    var pos = $tar.position();
-                    var w = $tar.width();
-                    var h = $tar.height();
-                    this.x((pos.left / $parent.zoom()) - originX());
-                    this.y((pos.top / $parent.zoom()) - originY());
-                    this.width(w / $parent.zoom());
-                    this.height(h / $parent.zoom());
-                    $parent.bindjQuery();
-                },
                 mousedown: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
@@ -176,18 +154,7 @@
                 
                 <!-- ko if: type === "image" -->
                 <div class="component image" data-bind="
-                event: { 
-                mouseup: function(data, event) {
-                    var $tar = $(event.delegateTarget);
-                    var pos = $tar.position();
-                    var w = $tar.width();
-                    var h = $tar.height();
-                    this.x((pos.left / $parent.zoom()) - originX());
-                    this.y((pos.top / $parent.zoom()) - originY());
-                    this.width(w / $parent.zoom());
-                    this.height(h / $parent.zoom());
-                    $parent.bindjQuery();
-                },
+                event: {
                 mousedown: function(data, event) {
                     $parent.displayProperties(this, event);
                 }},
@@ -240,23 +207,23 @@
                             
                             <!-- ko if: type === "anchor" -->
                             <td class="property-anchor">
-                                <input type="radio" name="anchor" id="a-tl" value="top-left" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-tl" value="top-left" data-bind="checked: value, click: $root.realign">
                                 <label for="a-tl"></label>
-                                <input type="radio" name="anchor" id="a-tc" value="top-center" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-tc" value="top-center" data-bind="checked: value, click: $root.realign">
                                 <label for="a-tc"></label>
-                                <input type="radio" name="anchor" id="a-tr" value="top-right" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-tr" value="top-right" data-bind="checked: value, click: $root.realign">
                                 <label for="a-tr"></label>
-                                <input type="radio" name="anchor" id="a-l" value="center-left" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-l" value="center-left" data-bind="checked: value, click: $root.realign">
                                 <label for="a-l"></label>
-                                <input type="radio" name="anchor" id="a-c" value="center-center" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-c" value="center-center" data-bind="checked: value, click: $root.realign">
                                 <label for="a-c"></label>
-                                <input type="radio" name="anchor" id="a-r" value="center-right" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-r" value="center-right" data-bind="checked: value, click: $root.realign">
                                 <label for="a-r"></label>
-                                <input type="radio" name="anchor" id="a-bl" value="bottom-left" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-bl" value="bottom-left" data-bind="checked: value, click: $root.realign">
                                 <label for="a-bl"></label>
-                                <input type="radio" name="anchor" id="a-bc" value="bottom-center" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-bc" value="bottom-center" data-bind="checked: value, click: $root.realign">
                                 <label for="a-bc"></label>
-                                <input type="radio" name="anchor" id="a-br" value="bottom-right" data-bind="checked: value">
+                                <input type="radio" name="anchor" id="a-br" value="bottom-right" data-bind="checked: value, click: $root.realign">
                                 <label for="a-br"></label>
                             </td>
                             <!-- /ko -->
