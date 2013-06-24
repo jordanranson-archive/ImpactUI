@@ -25,6 +25,7 @@
 function App() {
     var app = this;
     app.panel = new Panel();
+    app.sliceModal = new SliceModal();
     app.components = ko.observableArray();
     app.properties = ko.observableArray();
     app.zoom = ko.observable(2);
@@ -247,7 +248,6 @@ function App() {
                 slicedCtx.drawImage(origImg, x, y, w, h, 0, 0, w, h);
                 
                 src = slicedCvs.toDataURL();
-                console.log(x, y, w, h, position, src);
             }
             
             return "url('"+src+"')";
@@ -427,6 +427,14 @@ function App() {
     }
     
     
+    
+    // Slice modal
+    function SliceModal() {
+        var self = this;
+        self.component = ko.observable(null);
+    }
+    
+    
     // Initialization
     app.init = function() {
         Mousetrap.bind("del",   app.removeComponent);
@@ -462,6 +470,17 @@ function App() {
         $(".overlay").fadeIn();
         $(".modal").fadeOut();
         $(selector).fadeIn();
+    };
+    
+    
+    // Displays the slice modal dialog
+    app.showSliceModal = function() {
+        if(app.getSelected()._impactui.image.width > 0) {
+            app.sliceModal.component(app.getSelected());
+            app.showModal('.nineslice');
+        } else {
+            alert("No image set.");
+        }
     };
     
     

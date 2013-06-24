@@ -62,12 +62,20 @@
         <h2>Set Up Slices</h2>
         <p>Drag the guides to set up image slicing &mdash;</p>
         
-        <div class="slices">
-            <div class="slice slice-left"></div>
-            <div class="slice slice-right"></div>
-            <div class="slice slice-top"></div>
-            <div class="slice slice-bottom"></div>
+        <!-- ko if: sliceModal.component() !== null -->
+        
+        <div class="slices" data-bind="style: {
+            width: (sliceModal.component()._impactui.image.width) + 'px',
+            height: (sliceModal.component()._impactui.image.height) + 'px',
+            backgroundImage: sliceModal.component()._impactui.backgroundImage(),
+        }">
+            <div class="slice slice-left" data-bind="style: { left: (sliceModal.component().slices()[0]*4)+'px' }"></div>
+            <div class="slice slice-right" data-bind="style: { left: (sliceModal.component().slices()[2]*4)+'px' }"></div>
+            <div class="slice slice-top" data-bind="style: { top: (sliceModal.component().slices()[1]*4)+'px' }"></div>
+            <div class="slice slice-bottom" data-bind="style: { top: (sliceModal.component().slices()[3]*4)+'px' }"></div>
         </div>
+        
+        <!-- /ko -->
         
         <footer>
             <a class="btn btn-primary" data-bind="click: 
@@ -278,7 +286,7 @@
                             <!-- /ko -->
                             
                             <!-- ko if: type === "slices" -->
-                            <td><div class="btn btn-small" data-bind="click: function() { $root.showModal('.nineslice') }">Configure</div></td>
+                            <td><div class="btn btn-small" data-bind="click: function() { $root.showSliceModal() }">Configure</div></td>
                             <!-- /ko -->
                             
                             <!-- ko if: type === "imageMode" -->
