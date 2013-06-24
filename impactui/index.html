@@ -175,6 +175,23 @@
                 },
                 css: { selected: _impactui.selected() === true }">
                     <span data-bind="text: text()"></span>
+                    <!-- ko if: _impactui.backgroundImage() !== "none" -->
+                        <div class="component-slice slice-top">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </div>
+                        <div class="component-slice slice-middle">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </div>
+                        <div class="component-slice slice-bottom">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </div>
+                    <!-- /ko -->
                 </div>
                 <!-- /ko -->
                 

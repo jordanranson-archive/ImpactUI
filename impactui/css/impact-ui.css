@@ -444,13 +444,7 @@ tr:hover .property-anchor input:checked + label {
     -ms-user-select: none;
     user-select: none;
     background-repeat: no-repeat;
-    background-size: 100% 100%; 
-    image-rendering:optimizeSpeed;             /* Legal fallback                 */
-    image-rendering:-moz-crisp-edges;          /* Firefox                        */
-    image-rendering:-o-crisp-edges;            /* Opera                          */
-    image-rendering:-webkit-optimize-contrast; /* Chrome (and eventually Safari) */
-    image-rendering:optimize-contrast;         /* CSS3 Proposed                  */
-    -ms-interpolation-mode:nearest-neighbor;   /* IE8+                           */
+    background-size: 100% 100%;
 }
 
 .component:hover {
@@ -474,6 +468,71 @@ tr:hover .property-anchor input:checked + label {
     color: #fff;
     background-color: #666;
     text-align: center;
+}
+
+.component.button span {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 7;
+}
+
+.component .component-slice {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    z-index: 6;
+}
+
+.component .slice-top {
+    top: 0;
+    height: 4px;
+    background: red;
+}
+
+.component .slice-middle {
+    top: 4px;
+    bottom: 4px;
+    background: green;
+}
+
+.component .slice-bottom {
+    bottom: 0;
+    height: 4px;
+    background: blue;
+}
+
+.component .component-slice i {
+    position: absolute;
+    display: block;
+}
+
+.component .component-slice i:nth-child(1) {
+    width: 4px;
+    background: rgba(0,0,0,0.2);
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.component .component-slice i:nth-child(2) {
+    background: rgba(0,0,0,0.4);
+    right: 4px;
+    left: 4px;
+    top: 0;
+    bottom: 0;
+}
+
+.component .component-slice i:nth-child(3) {
+    background: rgba(0,0,0,0.6);
+    width: 4px;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .component.image {
