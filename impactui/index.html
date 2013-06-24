@@ -172,7 +172,7 @@
                     textShadow: _impactui.textShadow(),
                     boxShadow: _impactui.boxShadow(),
                     backgroundImage: (imageMode() !== 'sliceStretch' && imageMode() !== 'sliceTile') ? _impactui.backgroundImage() : 'none',
-                    backgroundSize: imageMode() === 'stretch' ? '100% 100%' : '32px 32px',
+                    backgroundSize: imageMode() === 'stretch' ? '100% 100%' : _impactui.backgroundSize(),
                     backgroundRepeat: imageMode() === 'tile' ? 'repeat' : 'no-repeat'
                 },
                 css: { selected: _impactui.selected() === true }">
@@ -181,34 +181,34 @@
                         <div class="component-slice slice-top">
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px'
+                                backgroundSize: _impactui.backgroundSize()
                             }"></i>
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px',
+                                backgroundSize: _impactui.backgroundSize(),
                                 backgroundPositionX: '-4px'
                             }"></i>
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px',
+                                backgroundSize: _impactui.backgroundSize(),
                                 backgroundPositionX: '-28px'
                             }"></i>
                         </div>
                         <div class="component-slice slice-middle">
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px',
+                                backgroundSize: _impactui.backgroundSize(),
                                 backgroundPositionY: '-4px'
                             }"></i>
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px',
+                                backgroundSize: _impactui.backgroundSize(),
                                 backgroundPositionX: '-4px',
                                 backgroundPositionY: '-4px'
                             }"></i>
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px',
+                                backgroundSize: _impactui.backgroundSize(),
                                 backgroundPositionX: '-28px',
                                 backgroundPositionY: '-4px'
                             }"></i>
@@ -216,18 +216,18 @@
                         <div class="component-slice slice-bottom">
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px',
+                                backgroundSize: _impactui.backgroundSize(),
                                 backgroundPositionY: '-28px'
                             }"></i>
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px',
+                                backgroundSize: _impactui.backgroundSize(),
                                 backgroundPositionX: '-4px',
                                 backgroundPositionY: '-28px'
                             }"></i>
                             <i data-bind="style: {
                                 backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: '32px 32px',
+                                backgroundSize: _impactui.backgroundSize(),
                                 backgroundPositionX: '-28px',
                                 backgroundPositionY: '-28px'
                             }"></i>

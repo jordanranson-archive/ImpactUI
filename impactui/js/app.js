@@ -130,7 +130,7 @@ function App() {
         self.z = ko.observable(0);
         self.width = ko.observable(48);
         self.height = ko.observable(16);
-        self.imagePath = ko.observable("media/ui/button.png");
+        self.imagePath = ko.observable("media/ui/");
         self.imageMode = ko.observable("none");
         self.slices = ko.observableArray([0,0,0,0]);
         self.anchor = ko.observable("center-center");
@@ -146,6 +146,7 @@ function App() {
         
         // Web app specific parameters
         self._impactui = {};
+        self._impactui.flag1 = ko.observable(false);
         self._impactui.selected = ko.observable(false);
         self._impactui.image = new Image();
         
@@ -184,24 +185,39 @@ function App() {
         });
         
         self._impactui.backgroundImage = ko.computed(function() {
-            return "url('../" + self.imagePath() + "')";
+            self._impactui.flag1();
+            return "url('"+self._impactui.image.src+"')";
+        });
+        
+        self._impactui.backgroundSize = ko.computed(function() {
+            self._impactui.flag1();
+            return ((self._impactui.image.width / 4)  * app.zoom()) + "px " + 
+                   ((self._impactui.image.height / 4) * app.zoom()) + "px";
         });
         
         
         // Subscriptions
         self.imagePath.subscribe(function(value) {
-            self._impactui.image = new Image();
+            var image = new Image();
             
-            self._impactui.image.onload = function() {
-                var zoom = 1;
+            image.onload = function() {
+                var zoom = 4;
+                
+                var originalCvs = document.createElement('canvas');
+                originalCvs.width = this.width;
+                originalCvs.height = this.height;
+                
+                var scaledCvs = document.createElement('canvas');
+                scaledCvs.width = this.width*zoom;
+                scaledCvs.height = this.height*zoom;
                 
                 // Create an offscreen canvas, draw an image to it, and fetch the pixels
-                var originalCtx = document.createElement('canvas').getContext('2d');
+                var originalCtx = originalCvs.getContext('2d');
                 originalCtx.drawImage(this, 0, 0);
                 var imgData = originalCtx.getImageData(0, 0, this.width, this.height).data;
 
                 // Draw the zoomed-up pixels to a different canvas context
-                var scaledCtx = document.createElement('canvas').getContext('2d');
+                var scaledCtx = scaledCvs.getContext('2d');
                 for (var x = 0;x < this.width; x++) {
                     for (var y = 0; y < this.height; y++) {
                         // Find the starting index in the one-dimensional image data
@@ -214,9 +230,15 @@ function App() {
                         scaledCtx.fillRect(x*zoom,y*zoom,zoom,zoom);
                     }
                 }
+                
+                self._impactui.image.width = scaledCvs.width;
+                self._impactui.image.height = scaledCvs.height;
+                self._impactui.image.src = scaledCvs.toDataURL();
+                
+                self._impactui.flag1(!self._impactui.flag1());
             };
             
-            self._impactui.image.src = value;
+            image.src = "../" + value;
         });
     }
 
