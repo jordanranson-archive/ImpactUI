@@ -179,57 +179,45 @@
                     <span data-bind="text: text()"></span>
                     <!-- ko if: _impactui.backgroundImage() !== "none" && (imageMode() === 'sliceStretch' || imageMode() === 'sliceTile') -->
                         <div class="component-slice slice-top">
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
+                            <i class="slice1" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageTL(),
                                 backgroundSize: _impactui.backgroundSize()
                             }"></i>
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: _impactui.backgroundSize(),
-                                backgroundPositionX: '-4px'
+                            <i class="slice2" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageTC(),
+                                backgroundSize: _impactui.backgroundSizeTileX()
                             }"></i>
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: _impactui.backgroundSize(),
-                                backgroundPositionX: '-28px'
+                            <i class="slice3" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageTR(),
+                                backgroundSize: _impactui.backgroundSize()
                             }"></i>
                         </div>
                         <div class="component-slice slice-middle">
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: _impactui.backgroundSize(),
-                                backgroundPositionY: '-4px'
+                            <i class="slice1" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageCL(),
+                                backgroundSize: _impactui.backgroundSizeTileY()
                             }"></i>
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: _impactui.backgroundSize(),
-                                backgroundPositionX: '-4px',
-                                backgroundPositionY: '-4px'
+                            <i class="slice2" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageCC(),
+                                backgroundSize: _impactui.backgroundSizeTile()
                             }"></i>
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: _impactui.backgroundSize(),
-                                backgroundPositionX: '-28px',
-                                backgroundPositionY: '-4px'
+                            <i class="slice3" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageCR(),
+                                backgroundSize: _impactui.backgroundSizeTileY()
                             }"></i>
                         </div>
                         <div class="component-slice slice-bottom">
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: _impactui.backgroundSize(),
-                                backgroundPositionY: '-28px'
+                            <i class="slice1" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageBL(),
+                                backgroundSize: _impactui.backgroundSize()
                             }"></i>
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: _impactui.backgroundSize(),
-                                backgroundPositionX: '-4px',
-                                backgroundPositionY: '-28px'
+                            <i class="slice2" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageBC(),
+                                backgroundSize: _impactui.backgroundSizeTileX()
                             }"></i>
-                            <i data-bind="style: {
-                                backgroundImage: _impactui.backgroundImage(),
-                                backgroundSize: _impactui.backgroundSize(),
-                                backgroundPositionX: '-28px',
-                                backgroundPositionY: '-28px'
+                            <i class="slice3" data-bind="style: {
+                                backgroundImage: _impactui.backgroundImageBR(),
+                                backgroundSize: _impactui.backgroundSize()
                             }"></i>
                         </div>
                     <!-- /ko -->

@@ -487,17 +487,17 @@ tr:hover .property-anchor input:checked + label {
 
 .component .slice-top {
     top: 0;
-    height: 4px;
+    height: 8px;
 }
 
 .component .slice-middle {
-    top: 4px;
-    bottom: 4px;
+    top: 8px;
+    bottom: 8px;
 }
 
 .component .slice-bottom {
     bottom: 0;
-    height: 4px;
+    height: 8px;
 }
 
 .component .component-slice i {
@@ -506,21 +506,21 @@ tr:hover .property-anchor input:checked + label {
 }
 
 .component .component-slice i:nth-child(1) {
-    width: 4px;
+    width: 8px;
     left: 0;
     top: 0;
     bottom: 0;
 }
 
 .component .component-slice i:nth-child(2) {
-    right: 4px;
-    left: 4px;
+    right: 8px;
+    left: 8px;
     top: 0;
     bottom: 0;
 }
 
 .component .component-slice i:nth-child(3) {
-    width: 4px;
+    width: 8px;
     right: 0;
     top: 0;
     bottom: 0;

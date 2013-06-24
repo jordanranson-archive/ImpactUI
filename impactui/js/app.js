@@ -124,7 +124,7 @@ function App() {
         self.name = ko.observable("Button");
         self.text = ko.observable("Button");
         self.textShadow = ko.observable("1px 1px #222");
-        self.boxShadow = ko.observable("1px 1px #222");
+        self.boxShadow = ko.observable("none");
         self.x = ko.observable(0);
         self.y = ko.observable(0);
         self.z = ko.observable(0);
@@ -132,7 +132,7 @@ function App() {
         self.height = ko.observable(16);
         self.imagePath = ko.observable("media/ui/");
         self.imageMode = ko.observable("none");
-        self.slices = ko.observableArray([0,0,0,0]);
+        self.slices = ko.observableArray([4,4,12,12]);
         self.anchor = ko.observable("center-center");
         self.originX = ko.computed(function() {
             var anchor = self.anchor().split("-")[1];
@@ -147,6 +147,7 @@ function App() {
         // Web app specific parameters
         self._impactui = {};
         self._impactui.flag1 = ko.observable(false);
+        self._impactui.slices = [0,0];
         self._impactui.selected = ko.observable(false);
         self._impactui.image = new Image();
         
@@ -184,15 +185,163 @@ function App() {
             return shadow;
         });
         
+        self._impactui.backgroundUrl = function (position) {
+            var src = self._impactui.image.src;
+            
+            if(position !== "all" && (self.imageMode() === "sliceTile" || self.imageMode() === "sliceStretch")) {
+                var anchor = position.split("-");
+                var zoom = 4;
+                
+                var origImg = self._impactui.image;
+                var origCvs = document.createElement("canvas");
+                    origCvs.width = origImg.width;
+                    origCvs.height = origImg.height;
+                var origCtx = origCvs.getContext("2d");
+                
+                var slicedCvs = document.createElement("canvas");
+                var slicedCtx = slicedCvs.getContext("2d");
+                var x, y, w, h;
+                
+                // Three slice points for the x axis
+                var x1 = self.slices()[0]*zoom;
+                var x2 = origImg.width - self.slices()[2]*zoom;
+                var x3 = origImg.width - (x1 + x2);
+                
+                // Three slice points for the y axis
+                var y1 = self.slices()[1]*zoom;
+                var y2 = origImg.height - self.slices()[3]*zoom;
+                var y3 = origImg.height - (y1 + y2);
+                
+                if(anchor[1] === "left") {
+                    x = 0;
+                    w = x1;
+                }
+                if(anchor[1] === "center") {
+                    x = self.slices()[0]*zoom;
+                    w = x3;
+                    
+                    self._impactui.slices[0] = w;
+                }
+                if(anchor[1] === "right") {
+                    x = self.slices()[2]*zoom;
+                    w = x2;
+                }
+                
+                if(anchor[0] === "top") {
+                    y = 0;
+                    h = y1;
+                }
+                if(anchor[0] === "center") {
+                    y = self.slices()[1]*zoom;
+                    h = y3;
+                    
+                    self._impactui.slices[1] = h;
+                }
+                if(anchor[0] === "bottom") {
+                    y = self.slices()[3]*zoom;
+                    h = y2;
+                }
+                
+                slicedCvs.width = w;
+                slicedCvs.height = h;
+                slicedCtx.drawImage(origImg, x, y, w, h, 0, 0, w, h);
+                
+                src = slicedCvs.toDataURL();
+                console.log(x, y, w, h, position, src);
+            }
+            
+            return "url('"+src+"')";
+        }
+        
         self._impactui.backgroundImage = ko.computed(function() {
             self._impactui.flag1();
-            return "url('"+self._impactui.image.src+"')";
+            return self._impactui.backgroundUrl("all");
+        });
+        
+        self._impactui.backgroundImageTL = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("top-left");
+        });
+        
+        self._impactui.backgroundImageTR = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("top-right");
+        });
+        
+        self._impactui.backgroundImageTC = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("top-center");
+        });
+        
+        self._impactui.backgroundImageCL = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("center-left");
+        });
+        
+        self._impactui.backgroundImageCR = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("center-right");
+        });
+        
+        self._impactui.backgroundImageCC = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("center-center");
+        });
+        
+        self._impactui.backgroundImageBL = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("bottom-left");
+        });
+        
+        self._impactui.backgroundImageBR = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("bottom-right");
+        });
+        
+        self._impactui.backgroundImageBC = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("bottom-center");
         });
         
         self._impactui.backgroundSize = ko.computed(function() {
             self._impactui.flag1();
+            
+            if(self.imageMode() === "sliceStretch" || self.imageMode() === "sliceTile") {
+                return "100% 100%";
+            }
+            
             return ((self._impactui.image.width / 4)  * app.zoom()) + "px " + 
                    ((self._impactui.image.height / 4) * app.zoom()) + "px";
+        });
+        
+        self._impactui.backgroundSizeTileX = ko.computed(function() {
+            self._impactui.flag1();
+            
+            if(self.imageMode() === "sliceTile") {
+                return ((self._impactui.slices[0] / 4) * app.zoom()) + "px 100%";
+            }
+            
+            return "100% 100%";
+        });
+        
+        self._impactui.backgroundSizeTileY = ko.computed(function() {
+            self._impactui.flag1();
+            
+            if(self.imageMode() === "sliceTile") {
+                return "100% " + ((self._impactui.slices[1] / 4) * app.zoom()) + "px";
+            }
+            
+            return "100% 100%";
+        });
+        
+        self._impactui.backgroundSizeTile = ko.computed(function() {
+            self._impactui.flag1();
+            
+            if(self.imageMode() === "sliceTile") {
+                return ((self._impactui.slices[0] / 4) * app.zoom()) + "px " + ((self._impactui.slices[1] / 4) * app.zoom()) + "px";
+            }
+            
+            return "100% 100%";
         });
         
         
