@@ -171,25 +171,66 @@
                     zIndex: 100 - z(),
                     textShadow: _impactui.textShadow(),
                     boxShadow: _impactui.boxShadow(),
-                    backgroundImage: _impactui.backgroundImage()
+                    backgroundImage: (imageMode() !== 'sliceStretch' && imageMode() !== 'sliceTile') ? _impactui.backgroundImage() : 'none',
+                    backgroundSize: imageMode() === 'stretch' ? '100% 100%' : '32px 32px',
+                    backgroundRepeat: imageMode() === 'tile' ? 'repeat' : 'no-repeat'
                 },
                 css: { selected: _impactui.selected() === true }">
                     <span data-bind="text: text()"></span>
-                    <!-- ko if: _impactui.backgroundImage() !== "none" -->
+                    <!-- ko if: _impactui.backgroundImage() !== "none" && (imageMode() === 'sliceStretch' || imageMode() === 'sliceTile') -->
                         <div class="component-slice slice-top">
-                            <i></i>
-                            <i></i>
-                            <i></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px'
+                            }"></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px',
+                                backgroundPositionX: '-4px'
+                            }"></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px',
+                                backgroundPositionX: '-28px'
+                            }"></i>
                         </div>
                         <div class="component-slice slice-middle">
-                            <i></i>
-                            <i></i>
-                            <i></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px',
+                                backgroundPositionY: '-4px'
+                            }"></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px',
+                                backgroundPositionX: '-4px',
+                                backgroundPositionY: '-4px'
+                            }"></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px',
+                                backgroundPositionX: '-28px',
+                                backgroundPositionY: '-4px'
+                            }"></i>
                         </div>
                         <div class="component-slice slice-bottom">
-                            <i></i>
-                            <i></i>
-                            <i></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px',
+                                backgroundPositionY: '-28px'
+                            }"></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px',
+                                backgroundPositionX: '-4px',
+                                backgroundPositionY: '-28px'
+                            }"></i>
+                            <i data-bind="style: {
+                                backgroundImage: _impactui.backgroundImage(),
+                                backgroundSize: '32px 32px',
+                                backgroundPositionX: '-28px',
+                                backgroundPositionY: '-28px'
+                            }"></i>
                         </div>
                     <!-- /ko -->
                 </div>
@@ -252,12 +293,14 @@
                             <td><div class="btn btn-small" data-bind="click: function() { $root.showModal('.nineslice') }">Configure</div></td>
                             <!-- /ko -->
                             
-                            <!-- ko if: type === "sliceMode" -->
+                            <!-- ko if: type === "imageMode" -->
                             <td>
                                 <select data-bind="value: value">
                                     <option value="none">none</option>
                                     <option value="stretch">stretch</option>
                                     <option value="tile">tile</option>
+                                    <option value="sliceStretch">sliceStretch</option>
+                                    <option value="sliceTile">sliceTile</option>
                                 </select>
                             </td>
                             <!-- /ko -->

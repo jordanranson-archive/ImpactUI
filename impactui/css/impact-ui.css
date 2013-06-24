@@ -443,8 +443,6 @@ tr:hover .property-anchor input:checked + label {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
 }
 
 .component:hover {
@@ -491,19 +489,16 @@ tr:hover .property-anchor input:checked + label {
 .component .slice-top {
     top: 0;
     height: 4px;
-    background: red;
 }
 
 .component .slice-middle {
     top: 4px;
     bottom: 4px;
-    background: green;
 }
 
 .component .slice-bottom {
     bottom: 0;
     height: 4px;
-    background: blue;
 }
 
 .component .component-slice i {
@@ -513,14 +508,12 @@ tr:hover .property-anchor input:checked + label {
 
 .component .component-slice i:nth-child(1) {
     width: 4px;
-    background: rgba(0,0,0,0.2);
     left: 0;
     top: 0;
     bottom: 0;
 }
 
 .component .component-slice i:nth-child(2) {
-    background: rgba(0,0,0,0.4);
     right: 4px;
     left: 4px;
     top: 0;
@@ -528,7 +521,6 @@ tr:hover .property-anchor input:checked + label {
 }
 
 .component .component-slice i:nth-child(3) {
-    background: rgba(0,0,0,0.6);
     width: 4px;
     right: 0;
     top: 0;

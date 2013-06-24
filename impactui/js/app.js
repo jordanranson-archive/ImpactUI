@@ -131,7 +131,7 @@ function App() {
         self.width = ko.observable(48);
         self.height = ko.observable(16);
         self.imagePath = ko.observable("media/ui/button.png");
-        self.sliceMode = ko.observable("none");
+        self.imageMode = ko.observable("none");
         self.slices = ko.observableArray([0,0,0,0]);
         self.anchor = ko.observable("center-center");
         self.originX = ko.computed(function() {
@@ -147,6 +147,7 @@ function App() {
         // Web app specific parameters
         self._impactui = {};
         self._impactui.selected = ko.observable(false);
+        self._impactui.image = new Image();
         
         self._impactui.left = ko.computed(function() {
             return ((Number(self.originX()) + Number(self.x())) * app.zoom()) + 'px'
@@ -184,6 +185,38 @@ function App() {
         
         self._impactui.backgroundImage = ko.computed(function() {
             return "url('../" + self.imagePath() + "')";
+        });
+        
+        
+        // Subscriptions
+        self.imagePath.subscribe(function(value) {
+            self._impactui.image = new Image();
+            
+            self._impactui.image.onload = function() {
+                var zoom = 1;
+                
+                // Create an offscreen canvas, draw an image to it, and fetch the pixels
+                var originalCtx = document.createElement('canvas').getContext('2d');
+                originalCtx.drawImage(this, 0, 0);
+                var imgData = originalCtx.getImageData(0, 0, this.width, this.height).data;
+
+                // Draw the zoomed-up pixels to a different canvas context
+                var scaledCtx = document.createElement('canvas').getContext('2d');
+                for (var x = 0;x < this.width; x++) {
+                    for (var y = 0; y < this.height; y++) {
+                        // Find the starting index in the one-dimensional image data
+                        var i = (y*this.width + x)*4;
+                        var r = imgData[i];
+                        var g = imgData[i+1];
+                        var b = imgData[i+2];
+                        var a = imgData[i+3];
+                        scaledCtx.fillStyle = "rgba("+r+","+g+","+b+","+(a/255)+")";
+                        scaledCtx.fillRect(x*zoom,y*zoom,zoom,zoom);
+                    }
+                }
+            };
+            
+            self._impactui.image.src = value;
         });
     }
 
@@ -424,7 +457,7 @@ function App() {
             if(!hidden) {
                 if(key === "z") 
                     type = "readonly";
-                else if(key === "lineHeight" || key === "anchor" || key === "textAlign" || key === "slices" || key === "sliceMode") 
+                else if(key === "lineHeight" || key === "anchor" || key === "textAlign" || key === "slices" || key === "imageMode") 
                     type = key;
                 else if(key === "x" || key === "y" || key === "z") 
                     type = "position";
