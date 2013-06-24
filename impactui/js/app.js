@@ -79,6 +79,7 @@ function App() {
         self.text = ko.observable("Label");
         self.font = ko.observable("04b03");
         self.textShadow = ko.observable("1px 1px #222");
+        self.textAlign = ko.observable("left");
         self.x = ko.observable(0);
         self.y = ko.observable(0);
         self.z = ko.observable(0);
@@ -129,6 +130,9 @@ function App() {
         self.z = ko.observable(0);
         self.width = ko.observable(48);
         self.height = ko.observable(16);
+        self.imagePath = ko.observable("media/ui/button.png");
+        self.sliceMode = ko.observable("none");
+        self.slices = ko.observableArray([0,0,0,0]);
         self.anchor = ko.observable("center-center");
         self.originX = ko.computed(function() {
             var anchor = self.anchor().split("-")[1];
@@ -143,25 +147,43 @@ function App() {
         // Web app specific parameters
         self._impactui = {};
         self._impactui.selected = ko.observable(false);
+        
         self._impactui.left = ko.computed(function() {
             return ((Number(self.originX()) + Number(self.x())) * app.zoom()) + 'px'
         });
+        
         self._impactui.top = ko.computed(function() {
             return ((Number(self.originY()) + Number(self.y())) * app.zoom()) + 'px'
         });
+        
         self._impactui.textShadow = ko.computed(function() {
             var str = self.textShadow().split(" ");
+            
+            // Invalid string or "none"
+            if(str.length !== 3 || self.textShadow() === "none")
+                return "none";
+            
             var shadow = (Number(str[0].replace("px","")) * app.zoom()) + "px " +
                          (Number(str[1].replace("px","")) * app.zoom()) + "px " +
                          str[2]
             return shadow;
         });
+        
         self._impactui.boxShadow = ko.computed(function() {
             var str = self.boxShadow().split(" ");
+            
+            // Invalid string or "none"
+            if(str.length !== 3 || self.boxShadow() === "none")
+                return "none";
+            
             var shadow = (Number(str[0].replace("px","")) * app.zoom()) + "px " +
                          (Number(str[1].replace("px","")) * app.zoom()) + "px " +
                          str[2]
             return shadow;
+        });
+        
+        self._impactui.backgroundImage = ko.computed(function() {
+            return "url('../" + self.imagePath() + "')";
         });
     }
 
@@ -199,7 +221,6 @@ function App() {
             return ((Number(self.originY()) + Number(self.y())) * app.zoom()) + 'px'
         });
     }
-    
     
     
     // Initialization
@@ -403,14 +424,12 @@ function App() {
             if(!hidden) {
                 if(key === "z") 
                     type = "readonly";
-                else if(key === "lineHeight") 
-                    type = "lineHeight";
+                else if(key === "lineHeight" || key === "anchor" || key === "textAlign" || key === "slices" || key === "sliceMode") 
+                    type = key;
                 else if(key === "x" || key === "y" || key === "z") 
                     type = "position";
                 else if(key === "width" || key === "height") 
                     type = "size";
-                else if(key === "anchor")
-                    type = "anchor";
                 else 
                     type = "string";
                 

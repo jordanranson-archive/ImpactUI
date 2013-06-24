@@ -56,6 +56,30 @@
             <a class="btn" data-bind="click: hideModals">Cancel</a>
         </footer>
     </div>
+    
+    <div class="modal nineslice">
+        <div class="pull-right modal-close"><i class="icon-remove-sign icon-2x" data-bind="click: hideModals"></i></div>
+        <h2>Set Up Slices</h2>
+        <p>Drag the guides to set up image slicing &mdash;</p>
+        
+        <div class="slices">
+            <div class="slice slice-left"></div>
+            <div class="slice slice-right"></div>
+            <div class="slice slice-top"></div>
+            <div class="slice slice-bottom"></div>
+        </div>
+        
+        <footer>
+            <a class="btn btn-primary" data-bind="click: 
+            function(data, event) { 
+                createComponent($('input[name=tgl-component]:radio:checked').val()); 
+                hideModals();
+            }">
+                <i class="icon-ok-sign"></i> Save changes
+            </a>
+            <a class="btn" data-bind="click: hideModals">Cancel</a>
+        </footer>
+    </div>
 
     <div class="editor-header">
         <div class="pull-left">
@@ -122,6 +146,7 @@
                     height: (height() * $parent.zoom()) + 'px',
                     lineHeight: lineHeight(),
                     fontSize: 10 * $parent.zoom() + 'px',
+                    textAlign: textAlign(),
                     zIndex: 100 - z(),
                     textShadow: _impactui.textShadow()
                 },
@@ -145,7 +170,8 @@
                     lineHeight: (height() * $parent.zoom()) + 'px',
                     zIndex: 100 - z(),
                     textShadow: _impactui.textShadow(),
-                    boxShadow: _impactui.boxShadow()
+                    boxShadow: _impactui.boxShadow(),
+                    backgroundImage: _impactui.backgroundImage()
                 },
                 css: { selected: _impactui.selected() === true }">
                     <span data-bind="text: text()"></span>
@@ -203,6 +229,30 @@
                             
                             <!-- ko if: type === "readonly" -->
                             <td data-bind="text: value"></td>
+                            <!-- /ko -->
+                            
+                            <!-- ko if: type === "slices" -->
+                            <td><div class="btn btn-small" data-bind="click: function() { $root.showModal('.nineslice') }">Configure</div></td>
+                            <!-- /ko -->
+                            
+                            <!-- ko if: type === "sliceMode" -->
+                            <td>
+                                <select data-bind="value: value">
+                                    <option value="none">none</option>
+                                    <option value="stretch">stretch</option>
+                                    <option value="tile">tile</option>
+                                </select>
+                            </td>
+                            <!-- /ko -->
+                            
+                            <!-- ko if: type === "textAlign" -->
+                            <td>
+                                <select data-bind="value: value">
+                                    <option value="left">left</option>
+                                    <option value="center">center</option>
+                                    <option value="right">right</option>
+                                </select>
+                            </td>
                             <!-- /ko -->
                             
                             <!-- ko if: type === "anchor" -->
