@@ -147,7 +147,7 @@ function App() {
         
         // Web app specific parameters
         self._impactui = {};
-        self._impactui.flag1 = ko.observable(false);
+        self._impactui.flag1 = ko.observable(0);
         self._impactui.slices = [0,0];
         self._impactui.selected = ko.observable(false);
         self._impactui.image = new Image();
@@ -384,7 +384,7 @@ function App() {
                 self._impactui.image.height = scaledCvs.height;
                 self._impactui.image.src = scaledCvs.toDataURL();
                 
-                self._impactui.flag1(!self._impactui.flag1());
+                self._impactui.flag1(self._impactui.flag1() + 1);
             };
             
             image.src = "../" + value;
@@ -467,6 +467,7 @@ function App() {
     
     // Displays a modal dialog
     app.showModal = function(selector) {
+        app.bindjQuery();
         $(".overlay").fadeIn();
         $(".modal").fadeOut();
         $(selector).fadeIn();
@@ -575,6 +576,19 @@ function App() {
     },
     
     
+    // Updates the slices of a component
+    app.updateSlices = function() {
+        var component = app.getSelected();
+        
+        var x1 = $(".slice-left").position().left / 4;
+        var y1 = $(".slice-top").position().top / 4;
+        var x2 = $(".slice-right").position().left / 4;
+        var y2 = $(".slice-bottom").position().top / 4;
+        
+        component.slices([x1, y1, x2, y2]);
+    },
+    
+    
     // Gets the currently selected component
     app.getSelected = function() {
         for(var i = 0; i < app.components().length; i++) {
@@ -595,14 +609,17 @@ function App() {
                 $(this).css("line-height", $(this).height() + "px");
             }
         });
+        
         $(".component.label").resizable({
             grid: 4 * app.zoom()
         });
+        
         $(".component").draggable({ 
             containment: ".editor-content", 
             scroll: false,
             grid: [ 4 * app.zoom(), 4 * app.zoom() ]
         });
+        
         $(".components-list").sortable({
             axis: "y",
             stop: function() {
@@ -613,10 +630,29 @@ function App() {
                 });
             }
         });
+        
         var len = $(".components-list").length;
         $(".components-list li").each(function(i) {
             $(this).find("input").val(i);
             $(this).find("input").trigger("change");
+        });
+        
+        $(".slice-left,.slice-right")
+        .draggable({
+            scroll: false,
+            axis: "x",
+            containment: "parent",
+            grid: [4, 4],
+            stop: app.updateSlices
+        });
+        
+        $(".slice-bottom,.slice-top")
+        .draggable({
+            scroll: false,
+            axis: "y",
+            containment: "parent",
+            grid: [4, 4],
+            stop: app.updateSlices
         });
     };
     
@@ -684,6 +720,7 @@ function App() {
 $(function() {
     var application = new App();
     ko.applyBindings(application);
+    application.bindjQuery();
     
     document.body.addEventListener("mouseup", function() {
         application.updateComponent();
