@@ -128,12 +128,14 @@
             style: { 
                 width: (panel.width() * zoom()) + 'px',
                 height: (panel.height() * zoom()) + 'px',
-                backgroundSize: (16 * zoom()) + 'px ' + (16 * zoom()) + 'px',
                 marginTop: '-' + ((panel.height() * zoom()) / 2) + 'px',
                 marginLeft: '-' + ((panel.width() * zoom()) / 2) + 'px'
-            }, foreach: components
-            ">
-            
+            }">
+                <div class="panel-background" data-bind="style: { backgroundColor: panel.backgroundColor() }"></div>
+                <div class="panel-overlay" data-bind="css: { 'show-grid': showGrid() }, style: { backgroundSize: (16 * zoom()) + 'px ' + (16 * zoom()) + 'px' }"></div>
+                
+                <!-- ko foreach: components() -->
+                
                 <!-- ko if: type === "label" -->
                 <div class="component label" data-bind="
                 event: { 
@@ -147,6 +149,7 @@
                     height: (height() * $parent.zoom()) + 'px',
                     lineHeight: lineHeight(),
                     fontSize: 8 * $parent.zoom() + 'px',
+                    color: color(),
                     textAlign: textAlign(),
                     zIndex: 100 - z(),
                     textShadow: _impactui.textShadow()
@@ -166,12 +169,12 @@
                     left: _impactui.left(),
                     top: _impactui.top(),
                     fontSize: 8 * $parent.zoom() + 'px',
+                    color: color(),
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
                     lineHeight: (height() * $parent.zoom()) + 'px',
                     zIndex: 100 - z(),
                     textShadow: _impactui.textShadow(),
-                    boxShadow: _impactui.boxShadow(),
                     backgroundImage: (imageMode() !== 'sliceStretch' && imageMode() !== 'sliceTile') ? _impactui.backgroundImage() : 'none',
                     backgroundSize: imageMode() === 'stretch' ? '100% 100%' : _impactui.backgroundSize(),
                     backgroundRepeat: imageMode() === 'tile' ? 'repeat' : 'no-repeat'
@@ -248,11 +251,72 @@
                     top: _impactui.top(),
                     width: (width() * $parent.zoom()) + 'px',
                     height: (height() * $parent.zoom()) + 'px',
-                    zIndex: 100 - z()
+                    zIndex: 100 - z(),
+                    backgroundImage: (imageMode() !== 'sliceStretch' && imageMode() !== 'sliceTile') ? _impactui.backgroundImage() : 'none',
+                    backgroundSize: imageMode() === 'stretch' ? '100% 100%' : _impactui.backgroundSize(),
+                    backgroundRepeat: imageMode() === 'tile' ? 'repeat' : 'no-repeat'
                 },
-                css: { selected: _impactui.selected() === true }"></div>
+                css: { selected: _impactui.selected() === true }">
+                    <!-- ko if: _impactui.backgroundImage() !== "none" && (imageMode() === 'sliceStretch' || imageMode() === 'sliceTile') -->
+                    <div class="component-slice slice-top" data-bind="style: { height: slices()[1] * $root.zoom() + 'px' }">
+                        <i class="slice1" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageTL(),
+                            backgroundSize: _impactui.backgroundSize(),
+                            width: slices()[0] * $root.zoom() + 'px'
+                        }"></i>
+                        <i class="slice2" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageTC(),
+                            backgroundSize: _impactui.backgroundSizeTileX(),
+                            left: slices()[0] * $root.zoom() + 'px', 
+                            right: ((_impactui.image.width / 4) - slices()[2]) * $root.zoom() + 'px'
+                        }"></i>
+                        <i class="slice3" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageTR(),
+                            backgroundSize: _impactui.backgroundSize(),
+                            width: ((_impactui.image.width / 4) - slices()[2]) * $root.zoom() + 'px'
+                        }"></i>
+                    </div>
+                    <div class="component-slice slice-middle" data-bind="style: { top: slices()[1] * $root.zoom() + 'px', bottom: ((_impactui.image.height / 4) - slices()[3]) * $root.zoom() + 'px' }">
+                        <i class="slice1" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageCL(),
+                            backgroundSize: _impactui.backgroundSizeTileY(),
+                            width: slices()[0] * $root.zoom() + 'px'
+                        }"></i>
+                        <i class="slice2" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageCC(),
+                            backgroundSize: _impactui.backgroundSizeTile(),
+                            left: slices()[0] * $root.zoom() + 'px', 
+                            right: ((_impactui.image.width / 4) - slices()[2]) * $root.zoom() + 'px'
+                        }"></i>
+                        <i class="slice3" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageCR(),
+                            backgroundSize: _impactui.backgroundSizeTileY(),
+                            width: ((_impactui.image.width / 4) - slices()[2]) * $root.zoom() + 'px'
+                        }"></i>
+                    </div>
+                    <div class="component-slice slice-bottom" data-bind="style: { height: ((_impactui.image.height / 4) - slices()[3]) * $root.zoom() + 'px' }">
+                        <i class="slice1" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageBL(),
+                            backgroundSize: _impactui.backgroundSize(),
+                            width: slices()[0] * $root.zoom() + 'px'
+                        }"></i>
+                        <i class="slice2" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageBC(),
+                            backgroundSize: _impactui.backgroundSizeTileX(),
+                            left: slices()[0] * $root.zoom() + 'px', 
+                            right: ((_impactui.image.width / 4) - slices()[2]) * $root.zoom() + 'px'
+                        }"></i>
+                        <i class="slice3" data-bind="style: {
+                            backgroundImage: _impactui.backgroundImageBR(),
+                            backgroundSize: _impactui.backgroundSize(),
+                            width: ((_impactui.image.width / 4) - slices()[2]) * $root.zoom() + 'px'
+                        }"></i>
+                    </div>
+                    <!-- /ko -->
+                </div>
                 <!-- /ko -->
-            
+                <!-- /ko -->
+                
             </div>
                 
         </div>

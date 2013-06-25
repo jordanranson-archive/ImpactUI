@@ -29,7 +29,7 @@ function App() {
     app.components = ko.observableArray();
     app.properties = ko.observableArray();
     app.zoom = ko.observable(2);
-    
+    app.showGrid = ko.observable(true);
     
     
     // UI panel
@@ -37,13 +37,16 @@ function App() {
         var self = this;
         self.id = 0;
         self.type = "panel";
+        
         self._impactui = {};
         self._impactui.selected = ko.observable(false);
         
         self.name = ko.observable("UI Panel");
+        self.z = ko.observable(0);
         self.width = ko.observable(512);
         self.height = ko.observable(374);
-        self.z = ko.observable(0);
+        
+        self.backgroundColor = ko.observable("transparent");
     }
 
     // Generic UI element
@@ -60,6 +63,7 @@ function App() {
         self.y = ko.observable(0);
         self.z = ko.observable(0);
         self.anchor = ko.observable("center-center");
+        
         self.originX = ko.computed(function() {
             var anchor = self.anchor().split("-")[1];
             return app.drawOffset(anchor, 0, app.panel.width());
@@ -77,17 +81,20 @@ function App() {
         self.type = "label";
         
         self.name = ko.observable("Label");
-        self.text = ko.observable("Label");
-        self.font = ko.observable("04b03");
-        self.textShadow = ko.observable("1px 1px #222");
-        self.textAlign = ko.observable("left");
         self.x = ko.observable(0);
         self.y = ko.observable(0);
         self.z = ko.observable(0);
         self.width = ko.observable(32);
         self.height = ko.observable(12);
-        self.lineHeight = ko.observable(1.2);
         self.anchor = ko.observable("center-center");
+        
+        self.text = ko.observable("Label");
+        self.font = ko.observable("04b03");
+        self.color = ko.observable("#f0f0f0");
+        self.textShadow = ko.observable("1px 1px #222");
+        self.textAlign = ko.observable("left");
+        self.lineHeight = ko.observable(1.6);
+        
         self.originX = ko.computed(function() {
             var anchor = self.anchor().split("-")[1];
             return app.drawOffset(anchor, 0, app.panel.width());
@@ -123,18 +130,26 @@ function App() {
         self.type = "button";
         
         self.name = ko.observable("Button");
-        self.text = ko.observable("Button");
-        self.textShadow = ko.observable("1px 1px #222");
-        self.boxShadow = ko.observable("none");
         self.x = ko.observable(0);
         self.y = ko.observable(0);
         self.z = ko.observable(0);
         self.width = ko.observable(48);
         self.height = ko.observable(16);
+        self.anchor = ko.observable("center-center");
+        
+        self.text = ko.observable("Button");
+        self.font = ko.observable("04b03");
+        self.color = ko.observable("#f0f0f0");
+        self.textShadow = ko.observable("1px 1px #222");
+        
         self.imagePath = ko.observable("media/ui/");
         self.imageMode = ko.observable("none");
         self.slices = ko.observableArray([4,4,12,12]);
-        self.anchor = ko.observable("center-center");
+        
+        self.focused = ko.observable("");
+        self.blurred = ko.observable("");
+        self.pressed = ko.observable("");
+        
         self.originX = ko.computed(function() {
             var anchor = self.anchor().split("-")[1];
             return app.drawOffset(anchor, 0, app.panel.width());
@@ -165,19 +180,6 @@ function App() {
             
             // Invalid string or "none"
             if(str.length !== 3 || self.textShadow() === "none")
-                return "none";
-            
-            var shadow = (Number(str[0].replace("px","")) * app.zoom()) + "px " +
-                         (Number(str[1].replace("px","")) * app.zoom()) + "px " +
-                         str[2]
-            return shadow;
-        });
-        
-        self._impactui.boxShadow = ko.computed(function() {
-            var str = self.boxShadow().split(" ");
-            
-            // Invalid string or "none"
-            if(str.length !== 3 || self.boxShadow() === "none")
                 return "none";
             
             var shadow = (Number(str[0].replace("px","")) * app.zoom()) + "px " +
@@ -398,13 +400,17 @@ function App() {
         self.type = "image";
         
         self.name = ko.observable("Image");
-        self.src = ko.observable("");
         self.x = ko.observable(0);
         self.y = ko.observable(0);
         self.z = ko.observable(0);
         self.width = ko.observable(96);
         self.height = ko.observable(96);
         self.anchor = ko.observable("center-center");
+        
+        self.imagePath = ko.observable("media/ui/");
+        self.imageMode = ko.observable("none");
+        self.slices = ko.observableArray([4,4,12,12]);
+        
         self.originX = ko.computed(function() {
             var anchor = self.anchor().split("-")[1];
             return app.drawOffset(anchor, 0, app.panel.width());
@@ -417,12 +423,221 @@ function App() {
         
         // Web app specific parameters
         self._impactui = {};
+        self._impactui.flag1 = ko.observable(0);
+        self._impactui.slices = [0,0];
         self._impactui.selected = ko.observable(false);
+        self._impactui.image = new Image();
+        
         self._impactui.left = ko.computed(function() {
             return ((Number(self.originX()) + Number(self.x())) * app.zoom()) + 'px'
         });
+        
         self._impactui.top = ko.computed(function() {
             return ((Number(self.originY()) + Number(self.y())) * app.zoom()) + 'px'
+        });
+        
+        self._impactui.backgroundUrl = function (position) {
+            var src = self._impactui.image.src;
+            
+            if(position !== "all" && (self.imageMode() === "sliceTile" || self.imageMode() === "sliceStretch")) {
+                var anchor = position.split("-");
+                var zoom = 4;
+                
+                var origImg = self._impactui.image;
+                var origCvs = document.createElement("canvas");
+                    origCvs.width = origImg.width;
+                    origCvs.height = origImg.height;
+                var origCtx = origCvs.getContext("2d");
+                
+                var slicedCvs = document.createElement("canvas");
+                var slicedCtx = slicedCvs.getContext("2d");
+                var x, y, w, h;
+                
+                // Three slice points for the x axis
+                var x1 = self.slices()[0]*zoom;
+                var x2 = origImg.width - self.slices()[2]*zoom;
+                var x3 = origImg.width - (x1 + x2);
+                
+                // Three slice points for the y axis
+                var y1 = self.slices()[1]*zoom;
+                var y2 = origImg.height - self.slices()[3]*zoom;
+                var y3 = origImg.height - (y1 + y2);
+                
+                if(anchor[1] === "left") {
+                    x = 0;
+                    w = x1;
+                }
+                if(anchor[1] === "center") {
+                    x = self.slices()[0]*zoom;
+                    w = x3;
+                    
+                    self._impactui.slices[0] = w;
+                }
+                if(anchor[1] === "right") {
+                    x = self.slices()[2]*zoom;
+                    w = x2;
+                }
+                
+                if(anchor[0] === "top") {
+                    y = 0;
+                    h = y1;
+                }
+                if(anchor[0] === "center") {
+                    y = self.slices()[1]*zoom;
+                    h = y3;
+                    
+                    self._impactui.slices[1] = h;
+                }
+                if(anchor[0] === "bottom") {
+                    y = self.slices()[3]*zoom;
+                    h = y2;
+                }
+                
+                slicedCvs.width = w;
+                slicedCvs.height = h;
+                slicedCtx.drawImage(origImg, x, y, w, h, 0, 0, w, h);
+                
+                src = slicedCvs.toDataURL();
+            }
+            
+            return "url('"+src+"')";
+        }
+        
+        self._impactui.backgroundImage = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("all");
+        });
+        
+        self._impactui.backgroundImageTL = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("top-left");
+        });
+        
+        self._impactui.backgroundImageTR = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("top-right");
+        });
+        
+        self._impactui.backgroundImageTC = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("top-center");
+        });
+        
+        self._impactui.backgroundImageCL = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("center-left");
+        });
+        
+        self._impactui.backgroundImageCR = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("center-right");
+        });
+        
+        self._impactui.backgroundImageCC = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("center-center");
+        });
+        
+        self._impactui.backgroundImageBL = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("bottom-left");
+        });
+        
+        self._impactui.backgroundImageBR = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("bottom-right");
+        });
+        
+        self._impactui.backgroundImageBC = ko.computed(function() {
+            self._impactui.flag1();
+            return self._impactui.backgroundUrl("bottom-center");
+        });
+        
+        self._impactui.backgroundSize = ko.computed(function() {
+            self._impactui.flag1();
+            
+            if(self.imageMode() === "sliceStretch" || self.imageMode() === "sliceTile") {
+                return "100% 100%";
+            }
+            
+            return ((self._impactui.image.width / 4)  * app.zoom()) + "px " + 
+                   ((self._impactui.image.height / 4) * app.zoom()) + "px";
+        });
+        
+        self._impactui.backgroundSizeTileX = ko.computed(function() {
+            self._impactui.flag1();
+            
+            if(self.imageMode() === "sliceTile") {
+                return ((self._impactui.slices[0] / 4) * app.zoom()) + "px 100%";
+            }
+            
+            return "100% 100%";
+        });
+        
+        self._impactui.backgroundSizeTileY = ko.computed(function() {
+            self._impactui.flag1();
+            
+            if(self.imageMode() === "sliceTile") {
+                return "100% " + ((self._impactui.slices[1] / 4) * app.zoom()) + "px";
+            }
+            
+            return "100% 100%";
+        });
+        
+        self._impactui.backgroundSizeTile = ko.computed(function() {
+            self._impactui.flag1();
+            
+            if(self.imageMode() === "sliceTile") {
+                return ((self._impactui.slices[0] / 4) * app.zoom()) + "px " + ((self._impactui.slices[1] / 4) * app.zoom()) + "px";
+            }
+            
+            return "100% 100%";
+        });
+        
+        
+        // Subscriptions
+        self.imagePath.subscribe(function(value) {
+            var image = new Image();
+            
+            image.onload = function() {
+                var zoom = 4;
+                
+                var originalCvs = document.createElement('canvas');
+                originalCvs.width = this.width;
+                originalCvs.height = this.height;
+                
+                var scaledCvs = document.createElement('canvas');
+                scaledCvs.width = this.width*zoom;
+                scaledCvs.height = this.height*zoom;
+                
+                // Create an offscreen canvas, draw an image to it, and fetch the pixels
+                var originalCtx = originalCvs.getContext('2d');
+                originalCtx.drawImage(this, 0, 0);
+                var imgData = originalCtx.getImageData(0, 0, this.width, this.height).data;
+
+                // Draw the zoomed-up pixels to a different canvas context
+                var scaledCtx = scaledCvs.getContext('2d');
+                for (var x = 0;x < this.width; x++) {
+                    for (var y = 0; y < this.height; y++) {
+                        // Find the starting index in the one-dimensional image data
+                        var i = (y*this.width + x)*4;
+                        var r = imgData[i];
+                        var g = imgData[i+1];
+                        var b = imgData[i+2];
+                        var a = imgData[i+3];
+                        scaledCtx.fillStyle = "rgba("+r+","+g+","+b+","+(a/255)+")";
+                        scaledCtx.fillRect(x*zoom,y*zoom,zoom,zoom);
+                    }
+                }
+                
+                self._impactui.image.width = scaledCvs.width;
+                self._impactui.image.height = scaledCvs.height;
+                self._impactui.image.src = scaledCvs.toDataURL();
+                
+                self._impactui.flag1(self._impactui.flag1() + 1);
+            };
+            
+            image.src = "../" + value;
         });
     }
     
@@ -544,7 +759,7 @@ function App() {
     
     // Add a component
     app.addComponent = function(component) {
-        app.components.push(component);
+        app.components.unshift(component);
         app.bindjQuery();
         
         for(var i = 0; i < app.components().length; i++) {

@@ -492,6 +492,35 @@ tr:hover .property-anchor input:checked + label {
     height: 0px;
     margin: -0px 0 0 -0px;
     background: #999;
+    z-index: 5;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    box-shadow: 0 5px 15px #000;
+}
+
+.panel-background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.panel-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 11;
+}
+
+.panel-overlay.show-grid {
     background-image: 
         linear-gradient( 0deg, 
             transparent 0%, 
@@ -507,14 +536,6 @@ tr:hover .property-anchor input:checked + label {
         );
     background-size: 16px 16px;
     background-repeat: repeat;
-    box-shadow: 0 5px 15px #000;
-    z-index: 5;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .component {
@@ -535,13 +556,17 @@ tr:hover .property-anchor input:checked + label {
 }
 
 .component:hover {
-    border: solid 1px rgba(0,0,0,.5);
-    margin: -1px 0 0 -1px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.5);
 }
 
 .component.selected {
-    border: solid 2px #33b5e5;
-    margin: -2px 0 0 -2px;
+    box-shadow: 0 0 0 2px #33b5e5;
+}
+
+.component.selected:hover {
+    box-shadow: 0 0 0 2px #33b5e5;
+    border: solid 1px rgba(0,0,0,.5);
+    margin: -1px 0 0 -1px;
 }
 
 .component.label {
@@ -611,7 +636,7 @@ tr:hover .property-anchor input:checked + label {
 }
 
 .component.image {
-    background-color: #666;
+
 }
 
 .editor-footer {
