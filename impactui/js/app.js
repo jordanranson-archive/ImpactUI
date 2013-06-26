@@ -31,7 +31,6 @@ function App() {
     app.zoom = ko.observable(2);
     app.showGrid = ko.observable(true);
     
-    
     // UI panel
     function Panel() {
         var self = this;
@@ -927,13 +926,23 @@ function App() {
     };
     
     
+    // Serializes data for saving
+    app.toJSON = function(model) {
+        var panel = "";
+        var components = ""
+        
+        console.log(panel + components);
+        return panel + components;
+    };
+    
     app.init();
 }
 
 
 // On page ready
+var application;
 $(function() {
-    var application = new App();
+    application = new App();
     ko.applyBindings(application);
     application.bindjQuery();
     
