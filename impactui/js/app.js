@@ -928,11 +928,27 @@ function App() {
     
     // Serializes data for saving
     app.toJSON = function(model) {
-        var panel = "";
-        var components = ""
+        var data = [];
+        var panel = app.panel;
+        var components = app.components();
         
-        console.log(panel + components);
-        return panel + components;
+        for(prop in panel) {
+            if(prop === "_impactui") {
+                delete panel[prop];
+            }
+        }
+        data.push(panel);
+        
+        for(var i = 0; i < components.length; i++) {
+            for(prop in components[i]) {
+                if(prop === "_impactui") {
+                    delete components[i][prop];
+                }
+            }
+        }
+        data.push(components);
+        
+        return ko.toJSON(data);
     };
     
     app.init();
