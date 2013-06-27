@@ -20,6 +20,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+// Check to see if an object is a computed observable
+// Thanks to RP Niemeyer of StackOverflow for this method
+ko.isComputed = function (instance) {
+    if ((instance === null) || (instance === undefined) || (instance.__ko_proto__ === undefined)) return false;
+    if (instance.__ko_proto__ === ko.dependentObservable) return true;
+    return ko.isComputed(instance.__ko_proto__); // Walk the prototype chain
+};
+
 
 // Impact UI
 function App() {
@@ -707,7 +715,7 @@ function App() {
     
     
     // Creates a new component and adds it to the list
-    app.createComponent = function(type) {
+    app.createComponent = function(type, viewModel) {
         var component;
         
         switch(type) {
@@ -717,8 +725,32 @@ function App() {
             default: component = new MComponent();
         }
         
+        // Extend component with passed in view model
+        // so it can inherit the _impactui stuff
+        if(viewModel !== undefined) {
+            console.log(viewModel);
+            for(x in component) {
+                for(y in viewModel) {
+                    if(x === y && !ko.isComputed(component[x])) {
+                        // If the prop is a ko observable
+                        if(ko.isObservable(component[x])) {
+                            component[x](viewModel[y]);
+                            console.log(x, component[x](), y, viewModel[y]);
+                        } 
+                        // If the prop is static
+                        else {
+                            component[x] = viewModel[y];
+                            console.log(x, component[x], y, viewModel[y]);
+                        }
+                    }
+                }
+            }
+        }
+        
         app.align(component);
-        app.addComponent(component);
+        app.addComponent(component, viewModel !== undefined);
+        
+        return component;
     };
     
     
@@ -757,16 +789,18 @@ function App() {
     
     
     // Add a component
-    app.addComponent = function(component) {
+    app.addComponent = function(component, dontSelect) {
         app.components.unshift(component);
         app.bindjQuery();
         
         for(var i = 0; i < app.components().length; i++) {
             app.components()[i]._impactui.selected(false)
         }
-        app.panel._impactui.selected(false);
-        component._impactui.selected(true);
-        app.displayProperties(component);
+        if(dontSelect !== true) {
+            app.panel._impactui.selected(false);
+            component._impactui.selected(true);
+            app.displayProperties(component);
+        }
     };
     
     
@@ -963,28 +997,30 @@ function App() {
         var data = '[{"id":0,"type":"panel","name":"UI Panel","z":0,"width":"256","height":"128","backgroundColor":"transparent"},[{"id":0,"type":"image","name":"Image","x":-120,"y":-56,"z":"2","width":240,"height":112,"anchor":"center-center","imagePath":"media/ui/btn4.png","imageMode":"sliceTile","slices":[6,6,10,10],"originX":128,"originY":64},{"id":0,"type":"button","name":"Button","x":8,"y":20,"z":"0","width":100,"height":24,"anchor":"center-center","text":"This is a button","font":"04b03","color":"#f0f0f0","textShadow":"1px 1px #222","imagePath":"media/ui/btn3.png","imageMode":"sliceTile","slices":[6,6,10,10],"focused":"","blurred":"","pressed":"","originX":128,"originY":64},{"id":0,"type":"label","name":"Label","x":-108,"y":-44,"z":"1","width":52,"height":20,"anchor":"center-center","text":"Label text","font":"04b03","color":"#000","textShadow":"1px 1px #fff","textAlign":"left","lineHeight":1.6,"originX":128,"originY":64}]]';
         var json = JSON.parse(data);
         
-        // Load panel
-        var viewModel = ko.mapping.fromJS(json[0], Panel);
-        viewModel._impactui = (new Panel())._impactui;
-        app.panel = viewModel;
+        // Update all the properties of panel instead of creating a new one
+        for(x in app.panel) {
+            for(y in json[0]) {
+                if(x === y) {
+                    // If the prop is a ko observable
+                    if(ko.isObservable(app.panel[x])) {
+                        app.panel[x](json[0][y]);
+                    } 
+                    // If the prop is static
+                    else {
+                        app.panel[x] = json[0][y];
+                    }
+                }
+            }
+        }
+        
+        // Select the panel
+        app.panel._impactui.selected(true);
         
         // Load components
-        app.components([]);
+        app.components([]); // clear existing components
         for(var i = 0; i < json[1].length; i++) {
-            var c = json[1][i];
-            var view = MComponent;
-            
-            switch(c.type) {
-                case "label": view = MLabel;
-                case "button": view = MButton;
-                case "image": view = MImage;
-            }
-            
-            viewModel = ko.mapping.fromJS(json[1][i], view);
-            viewModel._impactui = (new view())._impactui;
-            app.components.push(viewModel);
+            app.createComponent(json[1][i].type, json[1][i]);
         }
-        //console.log(app.components);
     };
     
     
