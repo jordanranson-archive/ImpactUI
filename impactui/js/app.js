@@ -927,7 +927,7 @@ function App() {
     
     
     // Serializes data for saving
-    app.toJSON = function(model) {
+    app.toJSON = function() {
         var data = [];
         var panel = app.panel;
         var components = app.components();
@@ -950,6 +950,43 @@ function App() {
         
         return ko.toJSON(data);
     };
+    
+    
+    // Saves a file
+    app.save = function() {
+        
+    };
+    
+    
+    // Loads a file
+    app.load = function() {
+        var data = '[{"id":0,"type":"panel","name":"UI Panel","z":0,"width":"256","height":"128","backgroundColor":"transparent"},[{"id":0,"type":"image","name":"Image","x":-120,"y":-56,"z":"2","width":240,"height":112,"anchor":"center-center","imagePath":"media/ui/btn4.png","imageMode":"sliceTile","slices":[6,6,10,10],"originX":128,"originY":64},{"id":0,"type":"button","name":"Button","x":8,"y":20,"z":"0","width":100,"height":24,"anchor":"center-center","text":"This is a button","font":"04b03","color":"#f0f0f0","textShadow":"1px 1px #222","imagePath":"media/ui/btn3.png","imageMode":"sliceTile","slices":[6,6,10,10],"focused":"","blurred":"","pressed":"","originX":128,"originY":64},{"id":0,"type":"label","name":"Label","x":-108,"y":-44,"z":"1","width":52,"height":20,"anchor":"center-center","text":"Label text","font":"04b03","color":"#000","textShadow":"1px 1px #fff","textAlign":"left","lineHeight":1.6,"originX":128,"originY":64}]]';
+        var json = JSON.parse(data);
+        
+        // Load panel
+        var viewModel = ko.mapping.fromJS(json[0], Panel);
+        viewModel._impactui = (new Panel())._impactui;
+        app.panel = viewModel;
+        
+        // Load components
+        app.components([]);
+        for(var i = 0; i < json[1].length; i++) {
+            var c = json[1][i];
+            var view = MComponent;
+            
+            switch(c.type) {
+                case "label": view = MLabel;
+                case "button": view = MButton;
+                case "image": view = MImage;
+            }
+            
+            viewModel = ko.mapping.fromJS(json[1][i], view);
+            viewModel._impactui = (new view())._impactui;
+            app.components.push(viewModel);
+        }
+        //console.log(app.components);
+    };
+    
     
     app.init();
 }
